@@ -1,0 +1,175 @@
+/* Estilo general del cuerpo */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+:root {
+    --rows: 5; /* Valor por defecto */
+    --columns: 5; /* Valor por defecto */
+    --playarColor: #FFA500;
+}
+
+.board-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    width: 100vw; /* Ocupa todo el ancho de la ventana */
+    overflow: hidden; /* Elimina cualquier barra de desplazamiento en el contenedor */
+    position: relative; /* Para centrar elementos en pantalla */
+}
+
+.board {
+    display: grid;
+    width: 100%; /* Asegúrate de que el tablero se ajuste al tamaño del contenedor */
+    height: 100%;
+    grid-template-columns: repeat(var(--columns), 1fr);
+    grid-template-rows: repeat(var(--rows), 1fr);
+}
+
+.cell {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #474A45;
+    box-sizing: border-box;
+    background-color: #5A5D58;
+}
+
+.hexagon {
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/default2.png'); /* Ruta relativa a la imagen */
+    background-size: cover;
+    background-position: center;
+
+}
+
+.hexagon-other-player {
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/default2.png'); /* Ruta relativa a la imagen */
+    background-size: cover;
+    background-position: center;
+    /*
+    width: 20px;
+    height: 20px;
+    background-color: var(--playarColor, #FFA500);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    margin: auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 2px solid black;
+    box-sizing: border-box;*/
+}
+
+
+/* Estilo del contenedor del código de partida */
+#gameCodeContainer {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #5A2A2A;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    height: 1.2em; /* Fija la altura en función del tamaño del texto */
+    font-family: 'Jacquard 12', monospace; /* Fuente para el código de juego */
+    font-size: 2em; /* Aumenta un poco el tamaño de la fuente */
+    color: #d1c7c1; 
+    z-index: 1000; /* Asegura que esté encima de otros elementos */
+    justify-content: center; /* Centra el texto horizontalmente */
+}
+
+/* Elimina márgenes del párrafo */
+#gameCodeContainer p {
+    margin: 0;
+    line-height: 1; /* Asegura que el texto ocupe solo la altura necesaria */
+}
+
+/* Estilo del contenedor del tiempo de partida */
+#timerContainer {
+    position: fixed;
+    top: 20px;
+    background-color: #5A2A2A;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0 8px;
+    height: 1.2em; /* Fija la altura en función del tamaño del texto */
+    font-family: 'Jacquard 12', monospace; /* Fuente para el tiempo de juego */
+    font-size: 2em; /* Tamaño de la fuente */
+    color: #d1c7c1; 
+    z-index: 1000; /* Asegura que esté encima de otros elementos */
+    display: flex;
+    align-items: center; /* Centra el texto verticalmente */
+    justify-content: center; /* Centra el texto horizontalmente */
+}
+
+/* Elimina márgenes del párrafo */
+#timerContainer p {
+    margin: 0;
+    line-height: 1; /* Asegura que el texto ocupe solo la altura necesaria */
+}
+
+/* Estilo de la tabla de puntajes */
+.score-board {
+    position: fixed;
+    top: 20px;       /* Ajusta el valor según la separación deseada del borde superior */
+    right: 20px;     /* Ajusta el valor según la separación deseada del borde derecho */
+    background-color: #5A2A2A;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    width: 300px;    /* Ajusta el ancho de la tabla */
+    max-height: 300px;
+    overflow-y: auto; /* Habilita scroll en caso de que haya muchos jugadores */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Jacquard 12', monospace; /* Fuente para la tabla */
+    font-size: 2em; /* Aumenta más el tamaño de la fuente para el código */
+    color: #d1c7c1; 
+    z-index: 1000;
+}
+
+
+/* Estilos para la tabla de puntajes */
+.score-board h2 {
+    margin: 0;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.score-board table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.score-board th, .score-board td {
+    padding: 5px;
+    text-align: left;
+}
+
+.score-board th {
+    font-weight: bold;
+    background-color: #854343;
+}
+
+.score-board tbody tr:nth-child(even) {
+    background-color: #854343;
+}
+
+/* Estilo para los botones */
+button {
+    font-family: 'Jacquard 12', monospace; /* Fuente para los botones */
+    font-size: 20px;
+    padding: 10px 20px;
+    margin: 10px 0;
+    cursor: pointer;
+    width: 200px;
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Scoreboard final</title>
+  <link rel="stylesheet" href="css/summary.css">
+  <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="score-board" id="scoreBoard">
+      <h2>Scoreboard</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Player Name</th>
+          <th>Score</th>
+        </tr>
+        </thead>
+        <tbody id="scoreTableBody">
+        <!-- Aquí se llenarán las filas de los jugadores -->
+        </tbody>
+      </table>
+    </div>
+  
+    <div class="player-position" id="player-position">
+      <p><span id="playerName"></span> finished in <span id="finalPosition"></span></p>
+      <p>Your score is: <span id="score"></span> points.</p>
+    </div>
+  
+    <button type="button" id="returnHomeButton" onclick="summary.returnHome()">Return home</button>
+  </div>
+  
+  <!-- JavaScript -->
+  <script src="/webjars/jquery/jquery.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/summary.js"></script>
+  </body>
+</html>

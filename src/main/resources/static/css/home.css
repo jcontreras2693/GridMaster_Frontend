@@ -1,0 +1,140 @@
+/* Fondo animado en tonos gris y bordó */
+body {
+    font-family: 'Jacquard 12', monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    animation: background-fade 5s infinite alternate;
+}
+
+@keyframes background-fade {
+    0% {
+        background-color: #2f2f2f; /* Gris oscuro */
+    }
+    100% {
+        background-color: #5A2A2A; /* Rojo bordó oscuro */
+    }
+}
+
+/* Estilo del título principal */
+.tracking-in-expand {
+    -webkit-animation: tracking-in-expand 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+            animation: tracking-in-expand 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+}
+
+@-webkit-keyframes tracking-in-expand {
+    0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+    }
+    40% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes tracking-in-expand {
+    0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+    }
+    40% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+h1 {
+    font-size: 128px;
+    color: #d1c7c1; /* Gris claro */
+    text-align: center;
+    margin-bottom: 50px;
+    font-weight: 599;
+    overflow: hidden;
+    white-space: nowrap;
+    text-shadow: 0px 0px 8px rgba(90, 42, 42, 0.7); /* Efecto medieval */
+}
+
+/* Sección del input */
+.input-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilo del input */
+input[type="text"] {
+    font-family: 'Jacquard 12', monospace; /* Fuente para el input */
+    font-size: 18px;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 300px;
+    text-align: center;
+    background-color: #3e3e3e; /* Fondo gris oscuro */
+    color: #ffffff; /* Texto blanco */
+    border: 2px solid #5A2A2A; /* Borde bordó */
+    outline: none;
+}
+
+/* Sección de unirse a un juego */
+.join-a-game {
+    display: flex;
+    flex-direction: column; /* Coloca los elementos en columna */
+    align-items: center; /* Centra horizontalmente */
+}
+
+/* Estilo del contenedor de join */
+.join-container {
+    display: flex;
+    flex-direction: column; /* Coloca los elementos en columna */
+    align-items: center; /* Centra horizontalmente */
+    margin: 10px 0; /* Añade margen superior e inferior */
+}
+
+/* Estilo de los botones */
+button {
+    font-family: 'Jacquard 12', monospace; /* Fuente para los botones */
+    font-size: 20px;
+    padding: 10px 20px;
+    margin: 10px 0;
+    cursor: pointer;
+    width: 200px;
+    background-color: #5A2A2A; /* Fondo bordó */
+    color: #ffffff; /* Texto blanco */
+    border: 2px solid #3e3e3e; /* Borde gris oscuro */
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #7b3a3a; /* Color bordó más claro en hover */
+}
+
+/* Estilo del input de game ID */
+#gameIdInput {
+    font-family: 'Jacquard 12', monospace; /* Usar la misma fuente */
+    font-size: 18px;
+    padding: 10px;
+    margin-top: 10px; /* Añadir margen para separar del botón */
+    width: 300px;
+    text-align: center;
+    background-color: #3e3e3e; /* Fondo gris oscuro */
+    color: #ffffff; /* Texto blanco */
+    border: 2px solid #5A2A2A; /* Borde bordó */
+    outline: none;
+}
+
+
+
+/* Estilo del mensaje de error */
+#error-message {
+    color: red;
+    display: none;
+    text-align: center;
+    margin-top: 10px;
+}

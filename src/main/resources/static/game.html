@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Juego de Tablero</title>
+    <link rel="stylesheet" href="css/game.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="board-container">
+        <div class="board" id="board">
+            <!-- Genera tus celdas aquí -->
+        </div>
+    </div>
+    <div class="score-board" id="scoreBoard">
+        <h2>Scoreboard</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Player Name</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody id="scoreTableBody">
+                <!-- Aquí se llenarán las filas de los jugadores -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Ventana pequeña para mostrar el código de la partida -->
+    <div class="game-code-display" id="gameCodeContainer">
+        <p>Game Code: <span id="gameCode"></span></p>
+    </div>
+
+    <!-- Ventana pequeña para mostrar el tiempo restante de la partida -->
+    <div class="timer-display" id="timerContainer">
+        <p><span id="timer"></span></p>
+    </div>
+
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
