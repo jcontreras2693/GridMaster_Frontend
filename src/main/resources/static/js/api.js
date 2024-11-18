@@ -1,6 +1,6 @@
 api=(function(){
 
-    var linkAzure = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
+    var linkAzure = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
     //var linkAzure = "http://localhost:8080/"
 
     //Gets
