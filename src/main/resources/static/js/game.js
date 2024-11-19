@@ -282,7 +282,7 @@ var game = (function() {
     };
 
     function connectAndSubscribe() {
-        var socket = new SockJS('/stompendpoint');
+        var socket = new SockJS('https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/stompendpoint');
         stompClient = Stomp.over(socket);
         console.log("Connecting...");
         console.log(stompClient);
