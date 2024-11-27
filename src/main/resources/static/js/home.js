@@ -24,14 +24,12 @@ var home = (function(){
                 return api.addPlayer(gameCode, playerName);
             })
             .then(() => {
-                api.startGame(gameCode);
-            })
-            .then(() => {
                 console.log("Setting player color");
                 game.setPlayerConfig(gameCode, playerName);
             })
             .then(() => {
-                window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
+                console.log("set player name in lobby");
+                window.location.href = `lobby.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`;
             })
             .catch(error => {
                 console.error("Error al crear el juego o añadir el jugador:", error);

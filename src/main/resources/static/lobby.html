@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Configuraciones de la Partida</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/lobbyAdmin.css">
+</head>
+
+<body>
+  <div class="container">
+    
+    <h1>
+        Game Settings
+        <span id="gameCodeDisplay" style="font-weight: normal; font-size: 0.8em; color: #ffffff;">[Code]</span>
+    </h1>
+
+    <div class="field">
+        <label for="columns">Board Dimensions (Columns x Rows):</label>
+        <div style="display: flex; gap: 10px;">
+            <input type="number" id="columns" name="columns" placeholder="# columns" min="0">
+            <input type="number" id="rows" name="rows" placeholder="# rows" min="0" max="59">
+            <div id="error-message" style="color: red; display: none;"></div> <!-- Contenedor para el mensaje de error -->
+        </div>
+    </div>
+
+    <!-- Tiempo de la partida -->
+    <div class="field">
+        <label for="gameTime">Game Time:</label>
+        <div style="display: flex; gap: 10px;">
+            <input type="number" id="minutes" name="minutes" placeholder="Minutes" min="0">
+            <input type="number" id="seconds" name="seconds" placeholder="Seconds" min="0" max="59">
+            <div id="error-message" style="color: red; display: none;"></div> <!-- Contenedor para el mensaje de error -->
+        </div>
+    </div>
+
+    <!-- Máximo de jugadores -->
+    <div class="field">
+        <label for="maxPlayers">Maximum Players:</label>
+        <input type="number" id="maxPlayers" name="maxPlayers" placeholder="maxPlayers" min="2" max="10">
+        <div id="error-message" style="color: red; display: none;"></div> <!-- Contenedor para el mensaje de error -->
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="buttons">
+        <button type="button" id="start" onclick="lobby.startGame()">Start Game</button>
+        <button type="button" onclick="exitGame()">Exit Game</button>
+    </div>
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/lobby.js"></script>
+
+</body>
+</html>
