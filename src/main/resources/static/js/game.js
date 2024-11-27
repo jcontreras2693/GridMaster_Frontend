@@ -63,7 +63,6 @@ var game = (function() {
     }
     
     var loadBoard = function() {
-
         const board = document.getElementById('board'); // Mueve esto aquí
         if (!board) {
             console.error("El elemento 'board' no se encontró.");
@@ -95,33 +94,7 @@ var game = (function() {
         playerCell.appendChild(hexagon);
 
         centerViewOnPlayer();
-
-        timer = window.setInterval(sendTime, 1000);
-        window.setInterval(sendTime, 1000);
-      
-        sendScore();
     };
-
-    var sendScore = function(){
-        api.getScore(gameCode).then(function(players) {
-            console.log("Score", players);
-            stompClient.send('/topic/game/' + gameCode + "/score", {}, JSON.stringify(players));
-        });
-    }
-
-    var sendTime = function(){
-        api.getTime(gameCode).then(function(time) {
-            if(time == "00:00"){
-                window.clearInterval(timer);
-                console.log("Timer clear");
-                disconnect();
-                api.endGame(gameCode).then(() => {
-                   window.location.href = `summary.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
-                });
-            }
-            stompClient.send('/topic/game/' + gameCode + "/time", {}, JSON.stringify(time));
-        });
-    }
 
     var updateScoreBoard = function(players) {
         const scoreTableBody = document.getElementById('scoreTableBody');
@@ -140,7 +113,6 @@ var game = (function() {
 
     var updateTime = function(time) {
         const gameTimer = document.getElementById('timer');
-        sendScore();
         gameTimer.textContent = time;
     };
 
@@ -282,7 +254,7 @@ var game = (function() {
     };
 
     function connectAndSubscribe() {
-        var socket = new SockJS('https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/stompendpoint');
+        var socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
         console.log("Connecting...");
         console.log(stompClient);
@@ -298,8 +270,13 @@ var game = (function() {
                 updateScoreBoard(players);
             });
             stompClient.subscribe('/topic/game/' + gameCode + "/time", function(data){
-                time = JSON.parse(data.body);
-                updateTime(time);
+                updateTime(data.body);
+                if(data.body == "00:00"){
+                    disconnect();
+                    api.endGame(gameCode).then(() => {
+                       window.location.href = `summary.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
+                    });
+                }
             });
 
             api.getPlayers(gameCode).then(function(data) {
@@ -315,8 +292,6 @@ var game = (function() {
         }
         console.log("Disconnected");
     }
-
-
 
     return {
         loadBoard,
