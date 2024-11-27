@@ -1,7 +1,7 @@
 api=(function(){
 
-    var linkAzure = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
-    //var linkAzure = "http://localhost:8080/"
+    //var linkAzure = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
+    var linkAzure = "http://localhost:8080/"
 
     //Gets
     var getPlayer = function(gameCode, playerName) {
@@ -96,6 +96,20 @@ api=(function(){
         });
     };
 
+    var updateGame = function(gameCode, min, sec, rows, columns, maxP) {
+        return $.ajax({
+            url: linkAzure + 'games/' + gameCode,
+            type: 'PUT',
+            data: JSON.stringify({ minutes: min, seconds: sec, xDimension: rows, yDimension: columns, maxPlayers: maxP}),
+            contentType: "application/json"
+        }).then(function(response) {
+            console.log("Game started");
+            return response;
+        }).catch(function(error) {
+            console.error("Error adding player:", error);
+        });
+    };
+
     var move = function(gameCode, playerName, o1, o2) {
         console.log(gameCode, playerName);
         var json = JSON.stringify({ o1: o1, o2 : o2 })
@@ -145,6 +159,7 @@ api=(function(){
         getPlayers,
         getTime,
         move,
+        updateGame,
         startGame,
         endGame,
         deleteGame

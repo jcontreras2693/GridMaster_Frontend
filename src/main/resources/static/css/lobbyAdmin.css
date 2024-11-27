@@ -1,0 +1,82 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #5A2A2A;
+    font-family: 'Jacquard 12', sans-serif;
+    color: #ffffff;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 500px;
+    background-color: rgba(90, 42, 42, 0.95);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los campos horizontalmente */
+    width: 100%;
+    text-align: center; /* Centra el texto dentro del contenedor */
+}
+
+.field label {
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+
+.field input {
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* Campos pequeños como minutos y segundos */
+.field-small input {
+    width: 50px; /* Tamaño fijo para campos pequeños */
+    font-size: 0.9em;
+    padding: 5px;
+    text-align: center;
+}
+
+.buttons {
+    display: flex;
+    gap: 20px;
+}
+
+button {
+    font-family: 'Jacquard 12', sans-serif;
+    font-size: 1em;
+    padding: 10px 20px;
+    background-color: #7b3b3b;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #9b4b4b;
+}
+
+/* Estilo del mensaje de error */
+#error-message {
+    color: red;
+    display: none;
+    text-align: center;
+    margin-top: 10px;
+}
