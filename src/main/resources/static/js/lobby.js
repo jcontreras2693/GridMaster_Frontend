@@ -92,16 +92,17 @@ var lobby = (function(){
 
         if (change){
             console.log("se cambio la configuracion, min: ", minutes," sec: ", seconds, " rows: ", rows, " columns: ", columns, "maxP: ", maxPlayer);
-            api.updateGame(gameCode, minutes, seconds, rows, columns, maxPlayer);
+            
         }   
 
-        api.startGame(gameCode)
-            .then(() => {
-                window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
-            })
-            .catch(error => {
-                console.error("Error al iniciar el juego juego: ", error);
-            });
+        api.updateGame(gameCode, minutes, seconds, rows, columns, maxPlayer).then(() => {
+            api.startGame(gameCode);
+        }).then(() => {
+            window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
+        })
+        .catch(error => {
+            console.error("Error al iniciar el juego juego: ", error);
+        });
 
     };
 
