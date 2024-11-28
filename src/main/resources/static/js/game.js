@@ -1,18 +1,18 @@
 var game = (function() {
-    const board = document.getElementById('board');
-    const rows = 100;
-    const columns = 100;
-    var playerName = "";
-    var playerRow = -1;
-    var playerColumn = -1;
-    var playerColor = "#FFA500";
-    var gameCode = -1;
-    const boardContainer = document.querySelector('.board-container');
-    var timer = null;
+    let board = document.getElementById('board');
+    let rows = 20;
+    let columns = 20;
+    let playerName = "";
+    let playerRow = -1;
+    let playerColumn = -1;
+    let playerColor = "#FFA500";
+    let gameCode = -1;
+    let boardContainer = document.querySelector('.board-container');
+    let timer = null;
 
-    const grid = Array.from({ length: rows }, () => Array(columns).fill(null));
-    var stompClient = null;
-    var players = [];
+    let grid = Array.from({ length: rows }, () => Array(columns).fill(null));
+    let stompClient = null;
+    let players = [];
 
     const colorToImageMap = {
         "#FF0000": "/images/red.png",
@@ -33,6 +33,12 @@ var game = (function() {
             drawAllTraces(gameCode);
             return playerColor;
         });
+    };
+
+    var setSizeofBoard = function(newX, newY){
+        rows = newX;
+        columns = newY;
+        console.log("rows: ", rows, " columns: ",columns);
     };
 
     var drawAllTraces = function(gameCode) {
@@ -69,7 +75,7 @@ var game = (function() {
             return; // Sal del método si board es null
         }
 
-        console.log("rows: ", rows, " columns: ",columns)
+        console.log("rows: ", rows, " columns: ",columns);
         board.style.setProperty('--rows', rows);
         board.style.setProperty('--columns', columns);
         console.log("PlayerColor: ", playerColor);
@@ -297,7 +303,8 @@ var game = (function() {
         loadBoard,
         setPlayerConfig,
         setGameCode,
-        drawAllTraces
+        drawAllTraces,
+        setSizeofBoard
     };
 
 })();
@@ -308,7 +315,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var playerName = params.get('playerName');
     var gameCode = params.get('gameCode');
+    var rws = params.get('rows');
+    var clm = params.get('columns');
+    
     game.setGameCode(gameCode);
+    game.setSizeofBoard(rws, clm);
+
+    //api.startGame(gameCode);
 
     const gameCodeElement = document.getElementById('gameCode');
     

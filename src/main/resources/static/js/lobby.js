@@ -8,7 +8,6 @@ var lobby = (function(){
     let seconds = 0;
     let maxPlayer = 4;
     let validateInputs = true;
-    let change = false;
 
     var setGameCode = function(code){
         gameCode = code;
@@ -41,7 +40,6 @@ var lobby = (function(){
         columns = cols;
         rows = rws;
         validateInputs = true;
-        change = true; 
     };
 
     var setTime = function(min, sec) {
@@ -61,7 +59,6 @@ var lobby = (function(){
         minutes = min;
         seconds = sec;
         validateInputs = true;
-        change = true; 
     };
 
     var setMaxPlayer = function(maxP) {
@@ -80,7 +77,6 @@ var lobby = (function(){
 
         maxPlayer = maxP;
         validateInputs = true;
-        change = true; 
     };
 
     var startGame = function() {
@@ -90,14 +86,14 @@ var lobby = (function(){
             return;
         }
 
-        if (change){
-            console.log("se cambio la configuracion, min: ", minutes," sec: ", seconds, " rows: ", rows, " columns: ", columns, "maxP: ", maxPlayer);
-            api.updateGame(gameCode, minutes, seconds, rows, columns, maxPlayer);
-        }   
+        api.updateGame(gameCode, minutes, seconds, rows, columns, maxPlayer);
 
+        //window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}&rows=${rows}&columns=${columns}`;
+
+        
         api.startGame(gameCode)
             .then(() => {
-                window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
+                window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}&rows=${rows}&columns=${columns}`;
             })
             .catch(error => {
                 console.error("Error al iniciar el juego juego: ", error);

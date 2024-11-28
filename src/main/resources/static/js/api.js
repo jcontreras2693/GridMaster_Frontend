@@ -1,7 +1,7 @@
 api=(function(){
 
-    var linkAzure = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
-    //var linkAzure = "http://localhost:8080/"
+    //var linkAzure = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
+    var linkAzure = "http://localhost:8080/"
 
     //Gets
     var getPlayer = function(gameCode, playerName) {
@@ -85,7 +85,7 @@ api=(function(){
 
     var startGame = function(gameCode) {
         return $.ajax({
-            url: linkAzure + 'games/' + gameCode,
+            url: linkAzure + 'games/' + gameCode + "/started",
             type: 'PUT',
             contentType: "application/json"
         }).then(function(response) {
