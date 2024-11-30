@@ -93,6 +93,8 @@ var game = (function() {
             }
         }
 
+        console.log("Posicion jugador: ", playerRow, playerColumn);
+
         const playerCell = grid[playerRow][playerColumn];
         const hexagon = document.createElement('div');
         hexagon.classList.add('hexagon');
@@ -332,6 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (gameCode && playerName) {
+        console.log("Iniciar configuraciones del jugador");
         game.setPlayerConfig(gameCode, playerName).then(() => {
             game.loadBoard();
         });

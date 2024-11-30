@@ -85,18 +85,33 @@ var lobby = (function(){
             alert('Please fix the errors in the form before starting the game.');
             return;
         }
-
-        api.updateGame(gameCode, minutes, seconds, rows, columns, maxPlayer);
-
-        //window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}&rows=${rows}&columns=${columns}`;
-
         
-        api.startGame(gameCode)
+        api.updateGame(gameCode, minutes, seconds, rows, columns, maxPlayer)
+            .then(() => {
+                api.startGame(gameCode);    
+            })
             .then(() => {
                 window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}&rows=${rows}&columns=${columns}`;
             })
             .catch(error => {
                 console.error("Error al iniciar el juego juego: ", error);
+            });
+
+    };
+
+    var exitGame = function() {
+
+        if (!validateInputs) {
+            alert('Please fix the errors in the form before starting the game.');
+            return;
+        }
+        
+        api.deletePLayer(gameCode, playerName)
+            .then(() => {
+                window.location.href = `index.html`;
+            })
+            .catch(error => {
+                console.error("Error al jugador del juego: ", error);
             });
 
     };
@@ -136,7 +151,8 @@ var lobby = (function(){
         setDimensions,
         setTime,
         setPlayerName,
-        startGame
+        startGame,
+        exitGame
     };
 
 })();

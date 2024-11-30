@@ -151,6 +151,18 @@ api=(function(){
         });
     }
 
+    var deletePLayer = function(gameCode, playerName) {
+        return $.ajax({
+            url: linkAzure + 'games/' + gameCode + "/players/" + playerName,
+            type: 'DELETE',
+            contentType: "application/json"
+        }).then(function(response) {
+            console.log("player deleted");
+        }).catch(function(error) {
+            console.error("Error deleting player:", error);
+        });
+    }
+
     return {
         createGame,
         addPlayer,
@@ -162,6 +174,7 @@ api=(function(){
         updateGame,
         startGame,
         endGame,
-        deleteGame
+        deleteGame,
+        deletePLayer
     };
 })();
