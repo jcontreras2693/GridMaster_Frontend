@@ -27,7 +27,7 @@ api=(function(){
             console.log("Scores: ", response);
             return response;
         }).catch(function(error) {
-            console.error("Error getting player:", error);
+            console.error("Error getting score:", error);
         });
     };
 
@@ -40,7 +40,7 @@ api=(function(){
                 console.log("Time: ", response);
                 return response;
             }).catch(function(error) {
-                console.error("Error getting player:", error);
+                console.error("Error getting time:", error);
             });
         };
 
@@ -53,12 +53,12 @@ api=(function(){
             console.log("Players: ", response);
             return response;
         }).catch(function(error) {
-            console.error("Error getting player:", error);
+            console.error("Error getting players:", error);
         });
     }
     
     //Post
-    var createGame = function(playerName) {
+    var createGame = function() {
         return $.ajax({
             url: linkAzure + 'games',
             type: 'POST',
@@ -92,7 +92,7 @@ api=(function(){
             console.log("Game started");
             return response;
         }).catch(function(error) {
-            console.error("Error adding player:", error);
+            console.error("Error starting game:", error);
         });
     };
 
@@ -106,13 +106,13 @@ api=(function(){
             console.log("Game started");
             return response;
         }).catch(function(error) {
-            console.error("Error adding player:", error);
+            console.error("Error updating game:", error);
         });
     };
 
     var move = function(gameCode, playerName, o1, o2) {
         console.log(gameCode, playerName);
-        var json = JSON.stringify({ o1: o1, o2 : o2 })
+        var json = JSON.stringify([o1, o2]);
         console.log(json);
         return $.ajax({
             url: linkAzure + 'games/' + gameCode + '/players/' + playerName,
@@ -122,7 +122,7 @@ api=(function(){
         }).then(function(response) {
             console.log("Player was move");
         }).catch(function(error) {
-            console.error("Error adding player:", error);
+            console.error("Error moving player:", error);
         });
     }
 
