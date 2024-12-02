@@ -19,7 +19,7 @@ var summary = (function(){
                         <td>${score}</td>
                     `;
                     scoreTableBody.appendChild(row);
-                });
+                }); 
         });
     };
 

@@ -24,10 +24,6 @@ var home = (function(){
                 return api.addPlayer(gameCode, playerName);
             })
             .then(() => {
-                console.log("Setting player color");
-                game.setPlayerConfig(gameCode, playerName);
-            })
-            .then(() => {
                 console.log("set player name in lobby");
                 window.location.href = `lobby.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`;
             })
@@ -72,9 +68,7 @@ var home = (function(){
 
         api.addPlayer(gameCode, playerName)
             .then(() => {
-                game.setPlayerConfig(gameCode, playerName);
-            }).then(() => {
-                window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
+                window.location.href = `lobby.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`;
             })
             .catch(error => {
                 console.log("Error recibido:", error); // Imprime el error completo

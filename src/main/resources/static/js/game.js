@@ -37,11 +37,18 @@ var game = (function() {
         });
     };
 
+    var setSizeofBoard = function(newX, newY){
+        rows = newX;
+        columns = newY;
+        console.log("rows: ", rows, " columns: ",columns);
+    };
+
     var drawAllTraces = function(gameCode) {
         api.getPlayers(gameCode).then(function(players) {
             players.forEach(
                 function (p) {
                     trace = p.trace;
+                    console.log("Trace: " + trace);
                     const rgb = p.color;
                     const hexColor = rgbToHex(rgb[0], rgb[1], rgb[2]);
                     trace.forEach(
@@ -72,7 +79,7 @@ var game = (function() {
             return; // Sal del método si board es null
         }
 
-        console.log("rows: ", rows, " columns: ",columns)
+        console.log("rows: ", rows, " columns: ",columns);
         board.style.setProperty('--rows', rows);
         board.style.setProperty('--columns', columns);
         console.log("PlayerColor: ", playerColor);
@@ -89,6 +96,8 @@ var game = (function() {
                 board.appendChild(cell);
             }
         }
+
+        console.log("Posicion jugador: ", playerRow, playerColumn);
 
         const playerCell = grid[playerRow][playerColumn];
         const hexagon = document.createElement('div');
@@ -292,11 +301,13 @@ var game = (function() {
             console.log('Connected: ' + frame);
             stompClient.subscribe('/topic/game/' + gameCode + "/players", function(data){
                 console.log("Players received");
+                console.log("Players: " + players);
                 players = JSON.parse(data.body);
                 subscribeToPlayers();
             });
             stompClient.subscribe('/topic/game/' + gameCode + "/score", function(data){
                 players = JSON.parse(data.body);
+                console.log(players);
                 updateScoreBoard(players);
             });
             stompClient.subscribe('/topic/game/' + gameCode + "/time", function(data){
@@ -322,7 +333,8 @@ var game = (function() {
         loadBoard,
         setPlayerConfig,
         setGameCode,
-        drawAllTraces
+        drawAllTraces,
+        setSizeofBoard
     };
 
 })();
@@ -333,7 +345,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var playerName = params.get('playerName');
     var gameCode = params.get('gameCode');
+    var rws = params.get('rows');
+    var clm = params.get('columns');
+    
     game.setGameCode(gameCode);
+    game.setSizeofBoard(rws, clm);
+
+    //api.startGame(gameCode);
 
     const gameCodeElement = document.getElementById('gameCode');
     
@@ -344,6 +362,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (gameCode && playerName) {
+        console.log("Iniciar configuraciones del jugador");
         game.setPlayerConfig(gameCode, playerName).then(() => {
             game.loadBoard();
         });
