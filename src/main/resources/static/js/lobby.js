@@ -142,7 +142,6 @@ var lobby = (function(){
             .catch(error => {
                 console.error("Error al iniciar el juego juego: ", error);
             });
-
     };
 
     var exitGame = function() {

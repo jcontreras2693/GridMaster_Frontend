@@ -1,20 +1,20 @@
 var game = (function() {
-    let board = document.getElementById('board');
-    let rows = 20;
-    let columns = 20;
-    let playerName = "";
-    let playerRow = -1;
-    let playerColumn = -1;
-    let playerColor = "#FFA500";
-    let gameCode = -1;
-    let boardContainer = document.querySelector('.board-container');
-    let timer = null;
-    const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
-    //const stompConnection = "http://localhost:8080"
+    const board = document.getElementById('board');
+    const rows = 100;
+    const columns = 100;
+    var playerName = "";
+    var playerRow = -1;
+    var playerColumn = -1;
+    var playerColor = "#FFA500";
+    var gameCode = -1;
+    const boardContainer = document.querySelector('.board-container');
+    var timer = null;
+    //const stompConnection = 'http://localhost:8080';
+    const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
 
-    let grid = Array.from({ length: rows }, () => Array(columns).fill(null));
-    let stompClient = null;
-    let players = [];
+    const grid = Array.from({ length: rows }, () => Array(columns).fill(null));
+    var stompClient = null;
+    var players = [];
 
     const colorToImageMap = {
         "#FF0000": "/images/red.png",
@@ -72,6 +72,7 @@ var game = (function() {
     }
     
     var loadBoard = function() {
+
         const board = document.getElementById('board'); // Mueve esto aquí
         if (!board) {
             console.error("El elemento 'board' no se encontró.");
@@ -310,13 +311,8 @@ var game = (function() {
                 updateScoreBoard(players);
             });
             stompClient.subscribe('/topic/game/' + gameCode + "/time", function(data){
-                updateTime(data.body);
-                if(data.body == "00:00"){
-                    disconnect();
-                    api.endGame(gameCode).then(() => {
-                       window.location.href = `summary.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
-                    });
-                }
+                time = JSON.parse(data.body);
+                updateTime(time);
             });
 
             api.getPlayers(gameCode).then(function(data) {
