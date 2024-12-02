@@ -16,39 +16,60 @@
         Game Settings
         <span id="gameCodeDisplay" style="font-weight: normal; font-size: 0.8em; color: #ffffff;">[Code]</span>
     </h1>
+    
+    <div class="settings">
+      <!-- Contenedor de configuración a la izquierda -->
+      <div class="left-side">
+        <!-- Dimensiones del tablero -->
+        <div class="field">
+            <label for="columns">Board Dimensions (Columns x Rows):</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="number" id="columns" name="columns" placeholder="# columns" min="0">
+                <input type="number" id="rows" name="rows" placeholder="# rows" min="0" max="59">
+                <div id="error-message" style="color: red; display: none;"></div>
+            </div>
+        </div>
 
-    <div class="field">
-        <label for="columns">Board Dimensions (Columns x Rows):</label>
-        <div style="display: flex; gap: 10px;">
-            <input type="number" id="columns" name="columns" placeholder="# columns" min="0">
-            <input type="number" id="rows" name="rows" placeholder="# rows" min="0" max="59">
-            <div id="error-message" style="color: red; display: none;"></div> <!-- Contenedor para el mensaje de error -->
+        <!-- Tiempo de la partida -->
+        <div class="field">
+            <label for="gameTime">Game Time:</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="number" id="minutes" name="minutes" placeholder="Minutes" min="0">
+                <input type="number" id="seconds" name="seconds" placeholder="Seconds" min="0" max="59">
+                <div id="error-message" style="color: red; display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Máximo de jugadores -->
+        <div class="field">
+            <label for="maxPlayers">Maximum Players:</label>
+            <input type="number" id="maxPlayers" name="maxPlayers" placeholder="maxPlayers" min="2" max="10">
+            <div id="error-message" style="color: red; display: none;"></div>
+        </div>
+      </div>
+
+      <!-- Contenedor de la tabla de jugadores a la derecha -->
+      <div class="right-side">
+        <h3>Players</h3>
+        <table id="playersTable">
+          <thead>
+            <tr>
+              <th>Player Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Las filas de jugadores se agregarán dinámicamente aquí -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+        <!-- Botones de acción -->
+        <div class="buttons">
+            <button type="button" id="start" onclick="lobby.startGame()">Start Game</button>
+            <button type="button" onclick="lobby.exitGame()">Exit Game</button>
         </div>
     </div>
-
-    <!-- Tiempo de la partida -->
-    <div class="field">
-        <label for="gameTime">Game Time:</label>
-        <div style="display: flex; gap: 10px;">
-            <input type="number" id="minutes" name="minutes" placeholder="Minutes" min="0">
-            <input type="number" id="seconds" name="seconds" placeholder="Seconds" min="0" max="59">
-            <div id="error-message" style="color: red; display: none;"></div> <!-- Contenedor para el mensaje de error -->
-        </div>
-    </div>
-
-    <!-- Máximo de jugadores -->
-    <div class="field">
-        <label for="maxPlayers">Maximum Players:</label>
-        <input type="number" id="maxPlayers" name="maxPlayers" placeholder="maxPlayers" min="2" max="10">
-        <div id="error-message" style="color: red; display: none;"></div> <!-- Contenedor para el mensaje de error -->
-    </div>
-
-    <!-- Botones de acción -->
-    <div class="buttons">
-        <button type="button" id="start" onclick="lobby.startGame()">Start Game</button>
-        <button type="button" onclick="lobby.exitGame()">Exit Game</button>
-    </div>
-
   </div>
 
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

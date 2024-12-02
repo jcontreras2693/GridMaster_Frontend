@@ -56,6 +56,18 @@ api=(function(){
             console.error("Error getting players:", error);
         });
     }
+
+    var getGameByCode = function(gameCode) {
+        return $.ajax({
+            url: linkAzure + 'games/' + gameCode,
+            type: 'GET',
+            contentType: "application/json"
+        }).then(function(response) {
+            return response;
+        }).catch(function(error) {
+            console.error("Error getting game:", error);
+        });
+    };
     
     //Post
     var createGame = function() {
@@ -175,6 +187,7 @@ api=(function(){
         startGame,
         endGame,
         deleteGame,
-        deletePLayer
+        deletePLayer,
+        getGameByCode
     };
 })();
