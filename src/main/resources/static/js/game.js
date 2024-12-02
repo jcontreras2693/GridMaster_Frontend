@@ -9,8 +9,8 @@ var game = (function() {
     let gameCode = -1;
     let boardContainer = document.querySelector('.board-container');
     let timer = null;
-    // const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
-    const stompConnection = "http://localhost:8080"
+    const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
+    //const stompConnection = "http://localhost:8080"
 
     let grid = Array.from({ length: rows }, () => Array(columns).fill(null));
     let stompClient = null;
