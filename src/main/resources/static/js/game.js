@@ -12,8 +12,8 @@ var game = (function() {
     let timeTimer = null;
     let scoreTimer = null;
     let gameTime = null;
-    const stompConnection = 'http://localhost:8080';
-    // const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
+    // const stompConnection = 'http://localhost:8080';
+    const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
 
     const grid = Array.from({ length: rows }, () => Array(columns).fill(null));
     var stompClient = null;
