@@ -1,16 +1,19 @@
 var game = (function() {
     const board = document.getElementById('board');
-    const rows = 100;
-    const columns = 100;
+    let rows = 100;
+    let columns = 100;
     var playerName = "";
     var playerRow = -1;
     var playerColumn = -1;
     var playerColor = "#FFA500";
+    let playerRole = null;
     var gameCode = -1;
     const boardContainer = document.querySelector('.board-container');
-    var timer = null;
-    //const stompConnection = 'http://localhost:8080';
-    const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
+    let timeTimer = null;
+    let scoreTimer = null;
+    let gameTime = null;
+    const stompConnection = 'http://localhost:8080';
+    // const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
 
     const grid = Array.from({ length: rows }, () => Array(columns).fill(null));
     var stompClient = null;
@@ -31,6 +34,14 @@ var game = (function() {
             playerName = player.name;
             playerRow = player.position[0];
             playerColumn = player.position[1];
+            playerRole = player.playerRole;
+
+            api.getTime(gameCode).then(
+                function(time){
+                    gameTime = time;
+                }
+            )
+
             connectAndSubscribe();
             drawAllTraces(gameCode);
             return playerColor;
@@ -107,10 +118,10 @@ var game = (function() {
 
         centerViewOnPlayer();
 
-        timer = window.setInterval(sendTime, 1000);
-        window.setInterval(sendTime, 1000);
-      
-        sendScore();
+        if(playerRole == "ADMIN"){
+            timeTimer = window.setInterval(sendTime, 1000);
+            scoreTimer = window.setInterval(sendScore, 5000);
+        }
     };
 
     var sendScore = function(){
@@ -121,17 +132,31 @@ var game = (function() {
     }
 
     var sendTime = function(){
-        api.getTime(gameCode).then(function(time) {
-            if(time == "00:00"){
-                window.clearInterval(timer);
-                console.log("Timer clear");
-                disconnect();
-                api.endGame(gameCode).then(() => {
-                   window.location.href = `summary.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
-                });
-            }
-            stompClient.send('/topic/game/' + gameCode + "/time", {}, JSON.stringify(time));
-        });
+
+        let minutes = Math.floor(gameTime / 60);
+        let seconds = gameTime % 60;
+
+        console.log("Minutes: ", minutes);
+        console.log("Seconds: ", seconds);
+
+        let fMinutes = minutes.toString().padStart(2, '0');
+        let fSeconds = seconds.toString().padStart(2, '0');
+
+        console.log("fMinutes: ", fMinutes);
+        console.log("fSeconds: ", fSeconds);
+
+        fTime = `${fMinutes}:${fSeconds}`;
+        if(fTime == "00:00"){
+            window.clearInterval(timeTimer);
+            window.clearInterval(scoreTimer);
+            console.log("Timer clear");
+            disconnect();
+            api.endGame(gameCode).then(() => {
+                window.location.href = `summary.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
+            });
+        }
+        gameTime--;
+        stompClient.send('/topic/game/' + gameCode + "/time", {}, JSON.stringify(fTime));
     }
 
     var updateScoreBoard = function(players) {
@@ -151,7 +176,6 @@ var game = (function() {
 
     var updateTime = function(time) {
         const gameTimer = document.getElementById('timer');
-        sendScore();
         gameTimer.textContent = time;
     };
 

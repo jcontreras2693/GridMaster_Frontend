@@ -9,8 +9,8 @@ var lobby = (function(){
     let seconds = 0;
     let maxPlayer = 4;
     let validateInputs = true;
-    let stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
-    //let stompConnection = "http://localhost:8080"
+    // let stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
+    let stompConnection = "http://localhost:8080"
     let stompClient = null;
 
     var setGameCode = function(code){
@@ -139,6 +139,9 @@ var lobby = (function(){
             .then(() => {
                 window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}&rows=${rows}&columns=${columns}`;
             })
+            .then(() => {
+                disconnect();
+            })
             .catch(error => {
                 console.error("Error al iniciar el juego juego: ", error);
             });
@@ -154,6 +157,9 @@ var lobby = (function(){
         api.deletePLayer(gameCode, playerName)
             .then(() => {
                 window.location.href = `index.html`;
+            })
+            .then(() => {
+                disconnect();
             })
             .catch(error => {
                 console.error("Error al jugador del juego: ", error);
@@ -264,6 +270,13 @@ var lobby = (function(){
         if (startButton) {
             startButton.disabled = true;
         }
+    }
+
+    function disconnect() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        console.log("Disconnected");
     }
 
     // Agregar eventos de cambio a los inputs
