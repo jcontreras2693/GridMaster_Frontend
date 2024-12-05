@@ -2,6 +2,11 @@ var home = (function(){
     const gameIdInput = document.getElementById('gameIdInput');
     const joinGameButton = document.getElementById('joinGameButton');
 
+    const saveGameData = function(playerName, gameCode) {
+        sessionStorage.setItem('playerName', playerName);
+        sessionStorage.setItem('gameCode', gameCode);
+    };
+
     var createGame = function(playerName) {
 
         const errorMessageDiv = document.getElementById('error-message');
@@ -20,12 +25,13 @@ var home = (function(){
         api.createGame(playerName)
             .then(code => {
                 gameCode = code;
-                console.log("Game code created:", gameCode);
                 return api.addPlayer(gameCode, playerName);
             })
             .then(() => {
-                console.log("set player name in lobby");
-                window.location.href = `lobby.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`;
+                saveGameData(playerName, gameCode);
+            })
+            .then(() => {
+                window.location.href = `lobby.html`;
             })
             .catch(error => {
                 console.error("Error al crear el juego o añadir el jugador:", error);
@@ -38,7 +44,6 @@ var home = (function(){
         gameIdInput.style.display = 'inline-block';
         joinGameButton.style.display = 'inline-block';
     }
-
     
     var joinGame = function(gameCode, playerName){
         localStorage.setItem('gameCode', gameCode);
@@ -68,7 +73,10 @@ var home = (function(){
 
         api.addPlayer(gameCode, playerName)
             .then(() => {
-                window.location.href = `lobby.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`;
+                saveGameData(playerName, gameCode);
+            })
+            .then(() => {
+                window.location.href = `lobby.html`;
             })
             .catch(error => {
                 console.log("Error recibido:", error); // Imprime el error completo
