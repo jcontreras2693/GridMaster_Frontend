@@ -122,9 +122,9 @@ api=(function(){
         });
     };
 
-    var move = function(gameCode, playerName, o1, o2) {
+    var move = function(gameCode, playerName, xPos, yPos) {
         console.log(gameCode, playerName);
-        var json = JSON.stringify([o1, o2]);
+        var json = JSON.stringify({ x: xPos, y: yPos});
         console.log(json);
         return $.ajax({
             url: linkAzure + 'games/' + gameCode + '/players/' + playerName,
