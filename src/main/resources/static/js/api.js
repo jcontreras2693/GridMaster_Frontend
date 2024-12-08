@@ -1,10 +1,10 @@
 api=(function(){
 
-    var linkAzure = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
-    // var linkAzure = "http://localhost:8080/"
+    // let linkAzure = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
+    let linkAzure = "http://localhost:8080/"
 
     //Gets
-    var getPlayer = function(gameCode, playerName) {
+    let getPlayer = function(gameCode, playerName) {
         console.log("gameCode: ", gameCode, " playerName: ", playerName);
         return $.ajax({
             url: linkAzure + 'games/' + gameCode + '/players/' + playerName,
@@ -18,7 +18,7 @@ api=(function(){
         });
     };
 
-    var getScore = function(gameCode) {
+    let getScore = function(gameCode) {
         return $.ajax({
             url: linkAzure + 'games/' + gameCode + '/score',
             type: 'GET',
@@ -31,7 +31,7 @@ api=(function(){
         });
     };
 
-    var getTime = function(gameCode) {
+    let getTime = function(gameCode) {
             return $.ajax({
                 url: linkAzure + 'games/' + gameCode + '/time',
                 type: 'GET',
@@ -44,7 +44,7 @@ api=(function(){
             });
         };
 
-    var getPlayers = function(gameCode){
+    let getPlayers = function(gameCode){
         return $.ajax({
             url: linkAzure + 'games/' + gameCode + '/players',
             type: 'GET',
@@ -57,7 +57,7 @@ api=(function(){
         });
     }
 
-    var getGameByCode = function(gameCode) {
+    let getGameByCode = function(gameCode) {
         return $.ajax({
             url: linkAzure + 'games/' + gameCode,
             type: 'GET',
@@ -70,7 +70,7 @@ api=(function(){
     };
     
     //Post
-    var createGame = function() {
+    let createGame = function() {
         return $.ajax({
             url: linkAzure + 'games',
             type: 'POST',
@@ -84,7 +84,7 @@ api=(function(){
     };
 
     //Puts
-    var addPlayer = function(gameCode, playerName) {
+    let addPlayer = function(gameCode, playerName) {
         return $.ajax({
             url: linkAzure + 'games/' + gameCode + '/players',
             type: 'PUT',
@@ -95,7 +95,7 @@ api=(function(){
         })
     };
 
-    var startGame = function(gameCode) {
+    let startGame = function(gameCode) {
         return $.ajax({
             url: linkAzure + 'games/' + gameCode + "/started",
             type: 'PUT',
@@ -108,7 +108,7 @@ api=(function(){
         });
     };
 
-    var updateGame = function(gameCode, min, sec, rows, columns, maxP) {
+    let updateGame = function(gameCode, min, sec, rows, columns, maxP) {
         return $.ajax({
             url: linkAzure + 'games/' + gameCode,
             type: 'PUT',
@@ -122,9 +122,9 @@ api=(function(){
         });
     };
 
-    var move = function(gameCode, playerName, xPos, yPos) {
+    let move = function(gameCode, playerName, xPos, yPos) {
         console.log(gameCode, playerName);
-        var json = JSON.stringify({ x: xPos, y: yPos});
+        let json = JSON.stringify({ x: xPos, y: yPos});
         console.log(json);
         return $.ajax({
             url: linkAzure + 'games/' + gameCode + '/players/' + playerName,
@@ -138,7 +138,7 @@ api=(function(){
         });
     }
 
-    var endGame = function(gameCode) {
+    let endGame = function(gameCode) {
         return $.ajax({
             url: linkAzure + 'games/' + gameCode + '/finished',
             type: 'PUT',
@@ -151,7 +151,7 @@ api=(function(){
     }
 
     //Deletes
-    var deleteGame = function(gameCode) {
+    let deleteGame = function(gameCode) {
         return $.ajax({
             url: linkAzure + 'games/' + gameCode,
             type: 'DELETE',
@@ -163,7 +163,7 @@ api=(function(){
         });
     }
 
-    var deletePLayer = function(gameCode, playerName) {
+    let deletePLayer = function(gameCode, playerName) {
         return $.ajax({
             url: linkAzure + 'games/' + gameCode + "/players/" + playerName,
             type: 'DELETE',

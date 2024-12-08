@@ -1,4 +1,4 @@
-var lobby = (function(){
+let lobby = (function(){
     let urlParams = new URLSearchParams(window.location.search);
     let playerName = urlParams.get('playerName');
     let playerRole = "";
@@ -9,11 +9,11 @@ var lobby = (function(){
     let seconds = 0;
     let maxPlayer = 4;
     let validateInputs = true;
-    let stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
-    // let stompConnection = "http://localhost:8080"
+    // let stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
+    let stompConnection = "http://localhost:8080"
     let stompClient = null;
 
-    var setGameCode = function(code){
+    let setGameCode = function(code){
         gameCode = code;
         const gameCodeHTML = document.getElementById('gameCodeDisplay');
         if (gameCodeHTML) {
@@ -21,7 +21,7 @@ var lobby = (function(){
         }
     }
 
-    var setPlayerName = function(name){
+    let setPlayerName = function(name){
         playerName = name;
 
         api.getPlayer(gameCode, name)
@@ -45,7 +45,7 @@ var lobby = (function(){
             });*/
     }
 
-    var sendSettingsToTopic = function (updatedSetting) {
+    let sendSettingsToTopic = function (updatedSetting) {
         if (stompClient && stompClient.connected) {
             stompClient.send('/topic/game/' + gameCode + "/settings", {}, JSON.stringify(updatedSetting));
             console.log("Enviando configuración actualizada: ", updatedSetting);
@@ -54,7 +54,7 @@ var lobby = (function(){
         }
     };
 
-    var setDimensions = function(cols, rws) {
+    let setDimensions = function(cols, rws) {
         const errorMessageDiv = document.getElementById('error-message');
         errorMessageDiv.textContent = '';  // Limpiar mensaje anterior
         errorMessageDiv.style.display = 'none';  // Ocultar mensaje
@@ -75,7 +75,7 @@ var lobby = (function(){
         sendSettingsToTopic({ dimension: { first: rows, second: columns } });
     };
 
-    var setTime = function(min, sec) {
+    let setTime = function(min, sec) {
         const errorMessageDiv = document.getElementById('error-message');
         errorMessageDiv.textContent = '';  // Limpiar mensaje anterior
         errorMessageDiv.style.display = 'none';  // Ocultar mensaje
@@ -96,7 +96,7 @@ var lobby = (function(){
         sendSettingsToTopic({ minutes: minutes, seconds: seconds });
     };
 
-    var setMaxPlayer = function(maxP) {
+    let setMaxPlayer = function(maxP) {
         const errorMessageDiv = document.getElementById('error-message');
         errorMessageDiv.textContent = '';  // Limpiar mensaje anterior
         errorMessageDiv.style.display = 'none';  // Ocultar mensaje
@@ -116,7 +116,7 @@ var lobby = (function(){
         sendSettingsToTopic({ maxPlayers: maxPlayer });
     };
 
-    var startGame = function() {
+    let startGame = function() {
 
         if (!validateInputs) {
             alert('Please fix the errors in the form before starting the game.');
@@ -147,7 +147,7 @@ var lobby = (function(){
             });
     };
 
-    var exitGame = function() {
+    let exitGame = function() {
 
         if (!validateInputs) {
             alert('Please fix the errors in the form before starting the game.');
@@ -167,7 +167,7 @@ var lobby = (function(){
 
     };
 
-    var updateSettings = function (settings) {
+    let updateSettings = function (settings) {
         console.log("Configuraciones recibidas: ", settings);
     
         if (settings.dimension) {
@@ -210,7 +210,7 @@ var lobby = (function(){
         }
     };
 
-    var updatePlayersTable = function(players) {
+    let updatePlayersTable = function(players) {
         console.log("SE HA UNIDO ", playerName);
         const scoreTableBody = document.querySelector('#playersTable tbody'); 
         scoreTableBody.innerHTML = ""; // Limpia las filas anteriores
@@ -228,7 +228,7 @@ var lobby = (function(){
     
 
     function connectAndSubscribe() {
-        var socket = new SockJS(stompConnection + '/stompendpoint');
+        let socket = new SockJS(stompConnection + '/stompendpoint');
         stompClient = Stomp.over(socket);
         console.log("Connecting...");
         console.log(stompClient);
@@ -281,31 +281,31 @@ var lobby = (function(){
 
     // Agregar eventos de cambio a los inputs
     document.getElementById('columns').addEventListener('input', function() {
-        var cols = parseInt(document.getElementById('columns').value);
-        var rws = parseInt(document.getElementById('rows').value);
+        let cols = parseInt(document.getElementById('columns').value);
+        let rws = parseInt(document.getElementById('rows').value);
         setDimensions(cols, rws);
     });
 
     document.getElementById('rows').addEventListener('input', function() {
-        var cols = parseInt(document.getElementById('columns').value);
-        var rws = parseInt(document.getElementById('rows').value);
+        let cols = parseInt(document.getElementById('columns').value);
+        let rws = parseInt(document.getElementById('rows').value);
         setDimensions(cols, rws);
     });
 
     document.getElementById('minutes').addEventListener('input', function() {
-        var min = parseInt(document.getElementById('minutes').value);
-        var sec = parseInt(document.getElementById('seconds').value);
+        let min = parseInt(document.getElementById('minutes').value);
+        let sec = parseInt(document.getElementById('seconds').value);
         setTime(min, sec);
     });
     
     document.getElementById('seconds').addEventListener('input', function() {
-        var min = parseInt(document.getElementById('minutes').value);
-        var sec = parseInt(document.getElementById('seconds').value);
+        let min = parseInt(document.getElementById('minutes').value);
+        let sec = parseInt(document.getElementById('seconds').value);
         setTime(min, sec);
     });
 
     document.getElementById('maxPlayers').addEventListener('input', function() {
-        var maxP = parseInt(document.getElementById('maxPlayers').value, 10);
+        let maxP = parseInt(document.getElementById('maxPlayers').value, 10);
         setMaxPlayer(maxP);
     });
 

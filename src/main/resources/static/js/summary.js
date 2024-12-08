@@ -1,12 +1,12 @@
-var summary = (function(){
-    var gameCode = -1;
-    var playerName = "";
+let summary = (function(){
+    let gameCode = -1;
+    let playerName = "";
 
-    var setGameCode = function(code){
+    let setGameCode = function(code){
         gameCode = code;
     }
 
-    var updateScoreBoard = function(gameCode) {
+    let updateScoreBoard = function(gameCode) {
         api.getScore(gameCode).then(function(players) {
             const scoreTableBody = document.getElementById('scoreTableBody');
                 scoreTableBody.innerHTML = ""; // Limpia las filas anteriores
@@ -23,7 +23,7 @@ var summary = (function(){
         });
     };
 
-    var updatePlayerSection = function(gameCode, playerName) {
+    let updatePlayerSection = function(gameCode, playerName) {
         const playerNameHTML = document.getElementById('playerName');
         const playerPositionHTML = document.getElementById('finalPosition');
         const playerScoreHTML = document.getElementById('score');
@@ -31,11 +31,11 @@ var summary = (function(){
         api.getPlayer(gameCode, playerName).then(function(player) {
             playerNameHTML.textContent = player.name;
             playerPositionHTML.textContent = player.scoreboardPosition;
-            playerScoreHTML.textContent = player.score;
+            playerScoreHTML.textContent = player.trace.length;
         });
     };
 
-    var returnHome = function(){
+    let returnHome = function(){
         api.deleteGame(gameCode).then(() => {
             window.location.href = `index.html`
         });
@@ -52,10 +52,10 @@ var summary = (function(){
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    var params = new URLSearchParams(window.location.search);
+    let params = new URLSearchParams(window.location.search);
 
-    var playerName = params.get('playerName');
-    var gameCode = params.get('gameCode');
+    let playerName = params.get('playerName');
+    let gameCode = params.get('gameCode');
 
     summary.setGameCode(gameCode);
 

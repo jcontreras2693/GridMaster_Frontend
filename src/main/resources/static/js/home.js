@@ -1,8 +1,8 @@
-var home = (function(){
+let home = (function(){
     const gameIdInput = document.getElementById('gameIdInput');
     const joinGameButton = document.getElementById('joinGameButton');
 
-    var createGame = function(playerName) {
+    let createGame = function(playerName) {
 
         const errorMessageDiv = document.getElementById('error-message');
     
@@ -34,13 +34,13 @@ var home = (function(){
 
 
 
-    var joinButton = function(){
+    let joinButton = function(){
         gameIdInput.style.display = 'inline-block';
         joinGameButton.style.display = 'inline-block';
     }
 
     
-    var joinGame = function(gameCode, playerName){
+    let joinGame = function(gameCode, playerName){
         localStorage.setItem('gameCode', gameCode);
 
         const errorMessageDiv = document.getElementById('error-message');
