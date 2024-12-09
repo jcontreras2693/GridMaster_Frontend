@@ -1,5 +1,6 @@
-var game = (function() {
+let game = (function() {
     const board = document.getElementById('board');
+
     let rows = sessionStorage.getItem('rows');
     let columns = sessionStorage.getItem('columns');
     let playerName = sessionStorage.getItem('playerName');
@@ -7,6 +8,7 @@ var game = (function() {
     let playerColumn = -1;
     let playerColor = "#FFA500";
     let playerRole = null;
+
     let gameCode = sessionStorage.getItem('gameCode');
     const boardContainer = document.querySelector('.board-container');
     let timeTimer = null;
@@ -14,6 +16,7 @@ var game = (function() {
     let gameTime = null;
     //const stompConnection = 'http://localhost:8080';
     const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
+
 
     const grid = Array.from({ length: rows }, () => Array(columns).fill(null));
     let stompClient = null;
@@ -47,19 +50,25 @@ var game = (function() {
         });
     };
 
-    var drawAllTraces = function(gameCode) {
+    let setSizeofBoard = function(newX, newY){
+        rows = newX;
+        columns = newY;
+        // console.log("rows: ", rows, " columns: ",columns);
+    };
+
+    let drawAllTraces = function(gameCode) {
         api.getPlayers(gameCode).then(function(players) {
             players.forEach(
                 function (p) {
                     trace = p.trace;
-                    console.log("Trace: " + trace);
+                    // console.log("Trace: " + trace);
                     const rgb = p.color;
                     const hexColor = rgbToHex(rgb[0], rgb[1], rgb[2]);
                     trace.forEach(
                         function (t) {
-                            var row = t.first;
-                            var column = t.second;
-                            var cell = grid[row][column];
+                            let row = t.first;
+                            let column = t.second;
+                            let cell = grid[row][column];
                             cell.style.backgroundColor = hexColor;
                     });
                 }
@@ -71,7 +80,7 @@ var game = (function() {
         return "#" + [r, g, b].map(x => x.toString(16).padStart(2, "0")).join("");
     }
     
-    var loadBoard = function() {
+    let loadBoard = function() {
 
         const board = document.getElementById('board'); // Mueve esto aquí
         if (!board) {
@@ -79,10 +88,10 @@ var game = (function() {
             return; // Sal del método si board es null
         }
 
-        console.log("rows: ", rows, " columns: ",columns);
+        // console.log("rows: ", rows, " columns: ",columns);
         board.style.setProperty('--rows', rows);
         board.style.setProperty('--columns', columns);
-        console.log("PlayerColor: ", playerColor);
+        // console.log("PlayerColor: ", playerColor);
         board.style.setProperty('--playarColor', playerColor);
 
         for (let i = 0; i < rows; i++) {
@@ -97,7 +106,7 @@ var game = (function() {
             }
         }
 
-        console.log("Posicion jugador: ", playerRow, playerColumn);
+        // console.log("Posicion jugador: ", playerRow, playerColumn);
 
         const playerCell = grid[playerRow][playerColumn];
         const hexagon = document.createElement('div');
@@ -113,42 +122,31 @@ var game = (function() {
         }
     };
 
-    var sendScore = function(){
+    let sendScore = function(){
         api.getScore(gameCode).then(function(players) {
-            console.log("Score", players);
             stompClient.send('/topic/game/' + gameCode + "/score", {}, JSON.stringify(players));
         });
     }
 
-    var sendTime = function(){
+    let sendTime = function(){
 
         let minutes = Math.floor(gameTime / 60);
         let seconds = gameTime % 60;
 
-        console.log("Minutes: ", minutes);
-        console.log("Seconds: ", seconds);
-
         let fMinutes = minutes.toString().padStart(2, '0');
         let fSeconds = seconds.toString().padStart(2, '0');
-
-        console.log("fMinutes: ", fMinutes);
-        console.log("fSeconds: ", fSeconds);
 
         fTime = `${fMinutes}:${fSeconds}`;
         if(fTime == "00:00"){
             window.clearInterval(timeTimer);
             window.clearInterval(scoreTimer);
-            console.log("Timer clear");
-            disconnect();
-            api.endGame(gameCode).then(() => {
-                window.location.href = `summary.html`
-            });
+            stompClient.send('/topic/game/' + gameCode + "/redirect", {}, "");
         }
         gameTime--;
         stompClient.send('/topic/game/' + gameCode + "/time", {}, JSON.stringify(fTime));
     }
 
-    var updateScoreBoard = function(players) {
+    let updateScoreBoard = function(players) {
         const scoreTableBody = document.getElementById('scoreTableBody');
         scoreTableBody.innerHTML = ""; // Limpia las filas anteriores
 
@@ -163,7 +161,7 @@ var game = (function() {
         });
     };
 
-    var updateTime = function(time) {
+    let updateTime = function(time) {
         const gameTimer = document.getElementById('timer');
         gameTimer.textContent = time;
     };
@@ -187,7 +185,7 @@ var game = (function() {
 
     let moveQueue = Promise.resolve();
 
-    var movePlayer = function(direction) {
+    let movePlayer = function(direction) {
         // Encadenar el nuevo movimiento a la cola de promesas
         moveQueue = moveQueue.then(() => processMove(direction)).catch((err) => {
             console.error("Error procesando el movimiento:", err);
@@ -200,8 +198,8 @@ var game = (function() {
         const oldRow = playerRow;
         const oldColumn = playerColumn;
 
-        var newRow = playerRow;
-        var newColumn = playerColumn;
+        let newRow = playerRow;
+        let newColumn = playerColumn;
 
         // Determinar la nueva posición en base a la dirección
         if (direction === 'up' && playerRow > 0) {
@@ -224,8 +222,8 @@ var game = (function() {
                     JSON.stringify({currentPosition: player.position, lastPosition: player.lastPosition, color : player.color})
                 );
                 
-                row = player.position[0];
-                column = player.position[1];
+                row = player.position.x;
+                column = player.position.y;
                 
 
                 // Actualizar la posición en el tablero y centrar la vista
@@ -238,7 +236,7 @@ var game = (function() {
             });
     }
 
-    var positionPlayer = function(newRow, newColumn, color) {
+    let positionPlayer = function(newRow, newColumn, color) {
         const previousCell = grid[playerRow][playerColumn];
         const previousHexagon = previousCell.querySelector('.hexagon');
         if (previousHexagon) {
@@ -266,17 +264,16 @@ var game = (function() {
     }
 
     function subscribeToPlayers(){
-        console.log("Players SUBSCRIPTION: ", players);
         players.forEach(
             function (p) {
                 if(p.name != playerName){
                     stompClient.subscribe('/topic/game/' + gameCode + '/players/' + p.name, function(data){
                         player = JSON.parse(data.body);
-                        row = player.currentPosition[0];
-                        column = player.currentPosition[1];
+                        row = player.currentPosition.x;
+                        column = player.currentPosition.y;
 
-                        oldRow = player.lastPosition[0];
-                        oldColumn = player.lastPosition[1];
+                        oldRow = player.lastPosition.x;
+                        oldColumn = player.lastPosition.y;
                         
                         const rgb = player.color;
                         const hexColor = rgbToHex(rgb[0], rgb[1], rgb[2]);
@@ -306,28 +303,29 @@ var game = (function() {
     };
 
     function connectAndSubscribe() {
-        var socket = new SockJS(stompConnection + '/stompendpoint');
+        let socket = new SockJS(stompConnection + '/stompendpoint');
         stompClient = Stomp.over(socket);
         console.log("Connecting...");
-        console.log(stompClient);
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
             stompClient.subscribe('/topic/game/' + gameCode + "/players", function(data){
-                console.log("Players received");
-                console.log("Players: " + players);
                 players = JSON.parse(data.body);
                 subscribeToPlayers();
             });
             stompClient.subscribe('/topic/game/' + gameCode + "/score", function(data){
                 players = JSON.parse(data.body);
-                console.log(players);
                 updateScoreBoard(players);
             });
             stompClient.subscribe('/topic/game/' + gameCode + "/time", function(data){
                 time = JSON.parse(data.body);
                 updateTime(time);
             });
-
+            stompClient.subscribe('/topic/game/' + gameCode + "/redirect", function(data){
+                api.endGame(gameCode).then(() => {
+                    window.location.href = `summary.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
+                });
+                disconnect();
+            });
             api.getPlayers(gameCode).then(function(data) {
                 players = data;
                 stompClient.send('/topic/game/' + gameCode + "/players", {}, JSON.stringify(data));
@@ -339,7 +337,6 @@ var game = (function() {
         if (stompClient != null) {
             stompClient.disconnect();
         }
-        console.log("Disconnected");
     }
 
     return {

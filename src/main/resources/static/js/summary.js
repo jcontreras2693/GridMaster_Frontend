@@ -2,11 +2,12 @@ var summary = (function(){
     let gameCode = sessionStorage.getItem('gameCode');
     let playerName = sessionStorage.getItem('playerName');
 
-    var setGameCode = function(code){
+
+    let setGameCode = function(code){
         gameCode = code;
     }
 
-    var updateScoreBoard = function(gameCode) {
+    let updateScoreBoard = function(gameCode) {
         api.getScore(gameCode).then(function(players) {
             const scoreTableBody = document.getElementById('scoreTableBody');
                 scoreTableBody.innerHTML = ""; // Limpia las filas anteriores
@@ -23,7 +24,7 @@ var summary = (function(){
         });
     };
 
-    var updatePlayerSection = function(gameCode, playerName) {
+    let updatePlayerSection = function(gameCode, playerName) {
         const playerNameHTML = document.getElementById('playerName');
         const playerPositionHTML = document.getElementById('finalPosition');
         const playerScoreHTML = document.getElementById('score');
@@ -31,11 +32,11 @@ var summary = (function(){
         api.getPlayer(gameCode, playerName).then(function(player) {
             playerNameHTML.textContent = player.name;
             playerPositionHTML.textContent = player.scoreboardPosition;
-            playerScoreHTML.textContent = player.score;
+            playerScoreHTML.textContent = player.trace.length;
         });
     };
 
-    var returnHome = function(){
+    let returnHome = function(){
         api.deleteGame(gameCode).then(() => {
             window.location.href = `index.html`
         });
@@ -51,9 +52,9 @@ var summary = (function(){
 })();
 
 document.addEventListener('DOMContentLoaded', function() {
-
     let gameCode = sessionStorage.getItem('gameCode');
     let playerName = sessionStorage.getItem('playerName');
+
 
     summary.setGameCode(gameCode);
 
