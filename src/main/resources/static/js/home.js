@@ -31,7 +31,22 @@ var home = (function(){
                 saveGameData(playerName, gameCode);
             })
             .then(() => {
-                window.location.href = `lobby.html`;
+                const baseUrl = "https://authenticationGR.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/authorize";
+                const params = new URLSearchParams({
+                    p: "B2C_1_LogIn-SignUp_GR",
+                    client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
+                    nonce: "defaultNonce",
+                    redirect_uri: "https://gentle-coast-03f74f10f.5.azurestaticapps.net/lobby.html",
+                    scope: "openid",
+                    response_type: "code",
+                    prompt: "login",
+                    code_challenge_method: "S256",
+                    code_challenge: "HMxtVf4UJVl8TOewidP9OkjewYFULC8l2niNRpPRLp4",
+                    login_hint: playerName, // Aquí agregas el valor capturado
+                });
+
+                const loginUrl = `${baseUrl}?${params.toString()}`;
+                window.location.href = loginUrl;
             })
             .catch(error => {
                 console.error("Error al crear el juego o añadir el jugador:", error);

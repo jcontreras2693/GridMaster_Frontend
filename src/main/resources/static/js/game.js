@@ -2,22 +2,22 @@ var game = (function() {
     const board = document.getElementById('board');
     let rows = sessionStorage.getItem('rows');
     let columns = sessionStorage.getItem('columns');
-    var playerName = sessionStorage.getItem('playerName');
-    var playerRow = -1;
-    var playerColumn = -1;
-    var playerColor = "#FFA500";
+    let playerName = sessionStorage.getItem('playerName');
+    let playerRow = -1;
+    let playerColumn = -1;
+    let playerColor = "#FFA500";
     let playerRole = null;
-    var gameCode = sessionStorage.getItem('gameCode');
+    let gameCode = sessionStorage.getItem('gameCode');
     const boardContainer = document.querySelector('.board-container');
     let timeTimer = null;
     let scoreTimer = null;
     let gameTime = null;
-    const stompConnection = 'http://localhost:8080';
-    //const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
+    //const stompConnection = 'http://localhost:8080';
+    const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
 
     const grid = Array.from({ length: rows }, () => Array(columns).fill(null));
-    var stompClient = null;
-    var players = [];
+    let stompClient = null;
+    let players = [];
 
     const colorToImageMap = {
         "#FF0000": "/images/red.png",
@@ -141,7 +141,7 @@ var game = (function() {
             console.log("Timer clear");
             disconnect();
             api.endGame(gameCode).then(() => {
-                window.location.href = `summary.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`
+                window.location.href = `summary.html`
             });
         }
         gameTime--;

@@ -1,6 +1,6 @@
 var summary = (function(){
-    var gameCode = -1;
-    var playerName = "";
+    let gameCode = sessionStorage.getItem('gameCode');
+    let playerName = sessionStorage.getItem('playerName');
 
     var setGameCode = function(code){
         gameCode = code;
@@ -52,10 +52,8 @@ var summary = (function(){
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    var params = new URLSearchParams(window.location.search);
-
-    var playerName = params.get('playerName');
-    var gameCode = params.get('gameCode');
+    let gameCode = sessionStorage.getItem('gameCode');
+    let playerName = sessionStorage.getItem('playerName');
 
     summary.setGameCode(gameCode);
 
