@@ -1,6 +1,7 @@
-let summary = (function(){
-    let gameCode = -1;
-    let playerName = "";
+var summary = (function(){
+    let gameCode = sessionStorage.getItem('gameCode');
+    let playerName = sessionStorage.getItem('playerName');
+
 
     let setGameCode = function(code){
         gameCode = code;
@@ -51,11 +52,9 @@ let summary = (function(){
 })();
 
 document.addEventListener('DOMContentLoaded', function() {
+    let gameCode = sessionStorage.getItem('gameCode');
+    let playerName = sessionStorage.getItem('playerName');
 
-    let params = new URLSearchParams(window.location.search);
-
-    let playerName = params.get('playerName');
-    let gameCode = params.get('gameCode');
 
     summary.setGameCode(gameCode);
 

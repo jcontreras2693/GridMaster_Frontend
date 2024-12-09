@@ -1,8 +1,8 @@
 api=(function(){
 
-    // let linkAzure = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
-    let linkAzure = "http://localhost:8080/"
-
+    let linkAzure = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
+    //var linkAzure = "http://localhost:8080/"
+    
     //Gets
     let getPlayer = function(gameCode, playerName) {
         console.log("gameCode: ", gameCode, " playerName: ", playerName);

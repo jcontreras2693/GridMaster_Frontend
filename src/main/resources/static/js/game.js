@@ -1,19 +1,22 @@
 let game = (function() {
     const board = document.getElementById('board');
-    let rows = 100;
-    let columns = 100;
-    let playerName = "";
+
+    let rows = sessionStorage.getItem('rows');
+    let columns = sessionStorage.getItem('columns');
+    let playerName = sessionStorage.getItem('playerName');
     let playerRow = -1;
     let playerColumn = -1;
     let playerColor = "#FFA500";
     let playerRole = null;
-    let gameCode = -1;
+
+    let gameCode = sessionStorage.getItem('gameCode');
     const boardContainer = document.querySelector('.board-container');
     let timeTimer = null;
     let scoreTimer = null;
     let gameTime = null;
-    const stompConnection = 'http://localhost:8080';
-    // const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
+    //const stompConnection = 'http://localhost:8080';
+    const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
+
 
     const grid = Array.from({ length: rows }, () => Array(columns).fill(null));
     let stompClient = null;
@@ -26,14 +29,13 @@ let game = (function() {
         "#FFFF00": "/images/yellow.png"
     };
 
-    let setPlayerConfig = function(gameCode, name) {
-        return api.getPlayer(gameCode, name).then(function(player) {
+    var setPlayerConfig = function() {
+        return api.getPlayer(gameCode, playerName).then(function(player) {
             const rgb = player.color; // [255, 0, 0]
             const hexColor = rgbToHex(rgb[0], rgb[1], rgb[2]);
             playerColor = hexColor;
-            playerName = player.name;
-            playerRow = player.position.x;
-            playerColumn = player.position.y;
+            playerRow = player.position[0];
+            playerColumn = player.position[1];
             playerRole = player.playerRole;
 
             api.getTime(gameCode).then(
@@ -73,10 +75,6 @@ let game = (function() {
             );
         });
     };
-
-    let setGameCode = function(newCode){
-        gameCode = newCode;
-    }
     
     function rgbToHex(r, g, b) {
         return "#" + [r, g, b].map(x => x.toString(16).padStart(2, "0")).join("");
@@ -344,28 +342,17 @@ let game = (function() {
     return {
         loadBoard,
         setPlayerConfig,
-        setGameCode,
-        drawAllTraces,
-        setSizeofBoard
+        drawAllTraces
     };
 
 })();
 
 document.addEventListener('DOMContentLoaded', function() {
-    
-    let params = new URLSearchParams(window.location.search);
-
-    let playerName = params.get('playerName');
-    let gameCode = params.get('gameCode');
-    let rws = params.get('rows');
-    let clm = params.get('columns');
-    
-    game.setGameCode(gameCode);
-    game.setSizeofBoard(rws, clm);
 
     //api.startGame(gameCode);
 
     const gameCodeElement = document.getElementById('gameCode');
+    var gameCode = sessionStorage.getItem('gameCode');
     
     if (gameCode && gameCodeElement) {
         gameCodeElement.textContent = gameCode;
@@ -373,13 +360,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("El elemento gameCode no se encontró o el código de partida está ausente.");
     }
     
-    if (gameCode && playerName) {
-        // console.log("Iniciar configuraciones del jugador");
-        game.setPlayerConfig(gameCode, playerName).then(() => {
-            game.loadBoard();
-        });
-    } else {
-        console.error("Game code or player name is missing.");
-    }
+    game.setPlayerConfig().then(() => {
+        game.loadBoard();
+    });
 
 });

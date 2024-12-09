@@ -2,7 +2,12 @@ let home = (function(){
     const gameIdInput = document.getElementById('gameIdInput');
     const joinGameButton = document.getElementById('joinGameButton');
 
-    let createGame = function(playerName) {
+    const saveGameData = function(playerName, gameCode) {
+        sessionStorage.setItem('playerName', playerName);
+        sessionStorage.setItem('gameCode', gameCode);
+    };
+
+    var createGame = function(playerName) {
 
         const errorMessageDiv = document.getElementById('error-message');
     
@@ -20,12 +25,28 @@ let home = (function(){
         api.createGame(playerName)
             .then(code => {
                 gameCode = code;
-                console.log("Game code created:", gameCode);
                 return api.addPlayer(gameCode, playerName);
             })
             .then(() => {
-                console.log("set player name in lobby");
-                window.location.href = `lobby.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`;
+                saveGameData(playerName, gameCode);
+            })
+            .then(() => {
+                const baseUrl = "https://authenticationGR.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/authorize";
+                const params = new URLSearchParams({
+                    p: "B2C_1_LogIn-SignUp_GR",
+                    client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
+                    nonce: "defaultNonce",
+                    redirect_uri: "https://gentle-coast-03f74f10f.5.azurestaticapps.net/lobby.html",
+                    scope: "openid",
+                    response_type: "code",
+                    prompt: "login",
+                    code_challenge_method: "S256",
+                    code_challenge: "HMxtVf4UJVl8TOewidP9OkjewYFULC8l2niNRpPRLp4",
+                    login_hint: playerName, // Aquí agregas el valor capturado
+                });
+
+                const loginUrl = `${baseUrl}?${params.toString()}`;
+                window.location.href = loginUrl;
             })
             .catch(error => {
                 console.error("Error al crear el juego o añadir el jugador:", error);
@@ -38,7 +59,6 @@ let home = (function(){
         gameIdInput.style.display = 'inline-block';
         joinGameButton.style.display = 'inline-block';
     }
-
     
     let joinGame = function(gameCode, playerName){
         localStorage.setItem('gameCode', gameCode);
@@ -68,7 +88,10 @@ let home = (function(){
 
         api.addPlayer(gameCode, playerName)
             .then(() => {
-                window.location.href = `lobby.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}`;
+                saveGameData(playerName, gameCode);
+            })
+            .then(() => {
+                window.location.href = `lobby.html`;
             })
             .catch(error => {
                 console.log("Error recibido:", error); // Imprime el error completo

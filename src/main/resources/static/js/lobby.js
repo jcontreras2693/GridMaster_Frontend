@@ -1,30 +1,27 @@
-let lobby = (function(){
-    let urlParams = new URLSearchParams(window.location.search);
-    let playerName = urlParams.get('playerName');
+
+var lobby = (function(){
+    let playerName = sessionStorage.getItem('playerName');
     let playerRole = "";
-    let gameCode = urlParams.get('gameCode');
+    let gameCode = sessionStorage.getItem('gameCode');
     let columns = 100;
     let rows = 100;
     let minutes = 5;
     let seconds = 0;
     let maxPlayer = 4;
     let validateInputs = true;
-    // let stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
-    let stompConnection = "http://localhost:8080"
+    let stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
+    //let stompConnection = "http://localhost:8080"
     let stompClient = null;
 
-    let setGameCode = function(code){
-        gameCode = code;
+    var setGameCode = function(){
         const gameCodeHTML = document.getElementById('gameCodeDisplay');
         if (gameCodeHTML) {
             gameCodeHTML.textContent = `(${gameCode})`;
         }
     }
-
-    let setPlayerName = function(name){
-        playerName = name;
-
-        api.getPlayer(gameCode, name)
+    
+    var setPlayerName = function(){
+        api.getPlayer(gameCode, playerName)
             .then(function(player) {
                 playerRole = player.playerRole;   
             })
@@ -44,6 +41,12 @@ let lobby = (function(){
                 );
             });*/
     }
+
+    const saveGameData = function(rows, columns) {
+        sessionStorage.setItem('rows', rows);
+        sessionStorage.setItem('columns', columns);
+    };
+
 
     let sendSettingsToTopic = function (updatedSetting) {
         if (stompClient && stompClient.connected) {
@@ -137,7 +140,10 @@ let lobby = (function(){
                 stompClient.send('/topic/game/' + gameCode + "/startGame", {}, JSON.stringify(message));
             })
             .then(() => {
-                window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(gameCode)}&rows=${rows}&columns=${columns}`;
+                saveGameData(rows, columns);
+            })
+            .then(() => {
+                window.location.href = `game.html`;
             })
             .then(() => {
                 disconnect();
@@ -248,7 +254,8 @@ let lobby = (function(){
             stompClient.subscribe('/topic/game/' + gameCode + "/startGame", function(data) {
                 const startGameData = JSON.parse(data.body);
                 console.log("Iniciando juego, redirigiendo a todos los jugadores...");
-                window.location.href = `game.html?playerName=${encodeURIComponent(playerName)}&gameCode=${encodeURIComponent(startGameData.gameCode)}&rows=${startGameData.rows}&columns=${startGameData.columns}`;
+                saveGameData(rows, columns);
+                window.location.href = `game.html`;
             });
             
             api.getScore(gameCode).then(function(players) {
@@ -322,19 +329,8 @@ let lobby = (function(){
 })();
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Llamar a setGameCode al cargar la página
-    let urlParams = new URLSearchParams(window.location.search);
-    let gameCode = urlParams.get('gameCode');
-    let playerName = urlParams.get('playerName');
-
-    lobby.setPlayerName(playerName);
-
-    // Verificar que gameCode esté presente en la URL
-    if (gameCode) {
-        lobby.setGameCode(gameCode);  // Llamar a setGameCode con el código del juego
-    } else {
-        console.error("El parámetro 'gameCode' no está presente en la URL.");
-    }
+    lobby.setPlayerName();
+    lobby.setGameCode(); 
 
     // Establecer los valores predeterminados de la configuración en los inputs
     document.getElementById('columns').value = 100; 
