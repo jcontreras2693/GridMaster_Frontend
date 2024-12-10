@@ -21,9 +21,7 @@ var lobby = (function(){
     }
     
     var setPlayerName = function(){
-        console.log("code: ", gameCode);
-        console.log("code saved: ", sessionStorage.getItem('gameCode'));
-        
+        gameCode = sessionStorage.getItem('gameCode');
         api.getPlayer(gameCode, playerName)
             .then(function(player) {
                 playerRole = player.playerRole;   
