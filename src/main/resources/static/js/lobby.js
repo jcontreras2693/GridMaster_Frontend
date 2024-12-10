@@ -337,15 +337,14 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('seconds').value = 0;
     document.getElementById('maxPlayers').value = 4;
 
-    const params = new URLSearchParams(window.location.search);
-    const authCode = params.get("code");
-
-    console.log("codigo de acceso: ", authCode);
     let playerName = sessionStorage.getItem('playerName');
     let role = sessionStorage.getItem('role');
     console.log("rol del jugador: ", role);
 
     if (role != "PLAYER"){
+        const params = new URLSearchParams(window.location.search);
+        const authCode = params.get("code");
+        console.log("codigo de acceso: ", authCode);
         if (!authCode) {
             alert("No authorization code found. Redirecting to login...");
             redirectToAuthentication(playerName);
@@ -363,6 +362,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error("Error al crear el juego o añadir el jugador:", error);
             });
+    } else{
+        lobby.setPlayerName();
+        lobby.setGameCode(); 
     }
 
     //exchangeCodeForToken(authCode);

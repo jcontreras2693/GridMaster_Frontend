@@ -117,6 +117,8 @@ let home = (function(){
             .then((game) => {
                 console.log("gameeeeeeeeeee: ", game);
                 let state = game.gameState;
+                sessionStorage.setItem('rows', game.dimension[0]);
+                sessionStorage.setItem('columns', game.dimension[1]);
                 if (state == "STARTED"){
                     window.location.href = `game.html`;
                 } else{
