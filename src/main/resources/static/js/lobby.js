@@ -329,18 +329,18 @@ var lobby = (function(){
 })();
 
 document.addEventListener('DOMContentLoaded', function () {
-    const params = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = params.get('access_token');
-    const playerName = sessionStorage.getItem('playerName');
+    const params = new URLSearchParams(window.location.search);
+    const authCode = params.get("code");
 
-    console.log("token de acceso: ", accessToken);
+    console.log("token de acceso: ", authCode);
 
-    if (accessToken) {
-        sessionStorage.setItem('accessToken', accessToken);
-
-        // Limpia el hash de la URL
-        history.replaceState({}, document.title, window.location.pathname);
+    if (!authCode) {
+        alert("No authorization code found. Redirecting to login...");
+        redirectToAuthentication();
+        return;
     }
+
+    const playerName = sessionStorage.getItem('playerName');
 
     if (!accessToken) {
         alert("You are not authenticated. Redirecting to login...");
