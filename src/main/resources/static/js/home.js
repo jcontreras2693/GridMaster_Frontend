@@ -33,8 +33,6 @@ let home = (function(){
             scope: "openid",
             response_type: "code",
             prompt: "login",
-            code_challenge_method: "S256",
-            code_challenge: "HMxtVf4UJVl8TOewidP9OkjewYFULC8l2niNRpPRLp4",
             login_hint: playerName, // Aquí agregas el valor capturado
         });
 
