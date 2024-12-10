@@ -340,10 +340,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const authCode = params.get("code");
 
     console.log("codigo de acceso: ", authCode);
+    let playerName = sessionStorage.getItem('playerName');
 
     if (!authCode) {
         alert("No authorization code found. Redirecting to login...");
-        let playerName = sessionStorage.getItem('playerName');
         redirectToAuthentication(playerName);
     }
 
