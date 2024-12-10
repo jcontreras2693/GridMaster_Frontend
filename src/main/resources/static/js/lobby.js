@@ -328,14 +328,66 @@ var lobby = (function(){
 
 })();
 
-document.addEventListener('DOMContentLoaded', function() {
-    lobby.setPlayerName();
-    lobby.setGameCode(); 
+document.addEventListener('DOMContentLoaded', function () {
+    const params = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = params.get('access_token');
+    const playerName = sessionStorage.getItem('playerName');
 
-    // Establecer los valores predeterminados de la configuración en los inputs
-    document.getElementById('columns').value = 100; 
-    document.getElementById('rows').value = 100;    
-    document.getElementById('minutes').value = 5;   
-    document.getElementById('seconds').value = 0;  
-    document.getElementById('maxPlayers').value = 4; 
+    console.log("token de acceso: ", accessToken);
+
+    if (accessToken) {
+        sessionStorage.setItem('accessToken', accessToken);
+
+        // Limpia el hash de la URL
+        history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    if (!accessToken) {
+        alert("You are not authenticated. Redirecting to login...");
+        redirectToAuthentication();
+        return;
+    }
+
+    // Configuración predeterminada en los inputs
+    document.getElementById('columns').value = 100;
+    document.getElementById('rows').value = 100;
+    document.getElementById('minutes').value = 5;
+    document.getElementById('seconds').value = 0;
+    document.getElementById('maxPlayers').value = 4;
+
+    // Lógica de creación de juego
+    if (playerName) {
+        createGameForPlayer(playerName, accessToken);
+    }
 });
+
+function redirectToAuthentication() {
+    const baseUrl = "https://authenticationGR.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/authorize";
+    const params = new URLSearchParams({
+        p: "B2C_1_LogIn-SignUp_GR",
+        client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
+        nonce: "defaultNonce",
+        redirect_uri: "https://gentle-coast-03f74f10f.5.azurestaticapps.net/lobby.html",
+        scope: "openid offline_access",
+        response_type: "token",
+        prompt: "login",
+    });
+
+    const loginUrl = `${baseUrl}?${params.toString()}`;
+    window.location.href = loginUrl;
+}
+
+function createGameForPlayer(playerName, accessToken) {
+
+    api.createGame(playerName, accessToken)
+        .then((gameCode) => {
+            // Guarda los datos del juego
+            lobby.setGameCode(gameCode);
+
+            alert(`Game created successfully! Game code: ${gameCode}`);
+        })
+        .catch((error) => {
+            console.error("Error creating game:", error);
+            alert("Failed to create the game. Please try again.");
+        });
+}
