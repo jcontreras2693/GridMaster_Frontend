@@ -348,6 +348,8 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
+    exchangeCodeForToken(authCode);
+
     // Configuración predeterminada en los inputs
     document.getElementById('columns').value = 100;
     document.getElementById('rows').value = 100;
@@ -355,14 +357,17 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('seconds').value = 0;
     document.getElementById('maxPlayers').value = 4;
 
-    // Lógica de creación de juego
-    if (playerName) {
-        createGameForPlayer(playerName, accessToken);
-    }
 });
 
 function redirectToAuthentication() {
-    const baseUrl = "https://authenticationGR.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/authorize";
+    
+    // Genera el `code_verifier` y `code_challenge`
+    const codeVerifier = generateCodeVerifier();
+    generateCodeChallenge(codeVerifier).then(codeChallenge => {
+        // Guarda el `code_verifier` para usarlo más tarde en el intercambio
+        sessionStorage.setItem("codeVerifier", codeVerifier);
+
+        const baseUrl = "https://authenticationgr.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/authorize";
         const params = new URLSearchParams({
             p: "B2C_1_LogIn-SignUp_GR",
             client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
@@ -372,15 +377,79 @@ function redirectToAuthentication() {
             response_type: "code",
             prompt: "login",
             code_challenge_method: "S256",
-            code_challenge: "HMxtVf4UJVl8TOewidP9OkjewYFULC8l2niNRpPRLp4"
+            code_challenge: codeChallenge, // Aquí usas el `code_challenge` generado
+            login_hint: playerName, // Aquí agregas el valor capturado
         });
 
         const loginUrl = `${baseUrl}?${params.toString()}`;
         window.location.href = loginUrl;
+    });
+}
+
+function generateCodeVerifier() {
+    const array = new Uint8Array(32);
+    window.crypto.getRandomValues(array);
+    return base64urlEncode(array);
+}
+
+function generateCodeChallenge(codeVerifier) {
+    return sha256(codeVerifier).then(hash => base64urlEncode(hash));
+}
+
+// Función para convertir un array de bytes en base64url (sin signos + y /)
+function base64urlEncode(array) {
+    const base64 = btoa(String.fromCharCode.apply(null, array));
+    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+// Función para hacer hash con SHA-256
+function sha256(buffer) {
+    return crypto.subtle.digest('SHA-256', buffer).then(hash => {
+        return new Uint8Array(hash);
+    });
+}
+
+function exchangeCodeForToken(authCode) {
+    const tokenEndpoint = "https://authenticationgr.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/token";
+    const codeVerifier = sessionStorage.getItem("codeVerifier");  // Recupera el `code_verifier` guardado
+
+    const body = new URLSearchParams({
+        grant_type: "authorization_code",
+        client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
+        redirect_uri: "https://gentle-coast-03f74f10f.5.azurestaticapps.net/lobby.html",
+        code: authCode,
+        code_verifier: codeVerifier, // Aquí usas el `code_verifier` recuperado
+    }).toString();
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", tokenEndpoint, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {  // 4 significa que la solicitud se completó
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                const accessToken = response.access_token;
+
+                // Guarda el token en sessionStorage
+                sessionStorage.setItem("accessToken", accessToken);
+
+                // Llama a la API para crear el juego
+                createGameForPlayer(accessToken);
+            } else {
+                console.error("Error exchanging authorization code for token:", xhr.statusText);
+                alert("Failed to authenticate. Please try again.");
+            }
+        }
+    };
+
+    // Enviar la solicitud con el body que contiene los datos del formulario
+    xhr.send(body);
 }
 
 function createGameForPlayer(playerName, accessToken) {
 
+    console.log("accessToken: ", accessToken);
     api.createGame(playerName, accessToken)
         .then((gameCode) => {
             // Guarda los datos del juego
