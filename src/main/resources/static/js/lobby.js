@@ -401,41 +401,35 @@ function sha256(buffer) {
     });
 }
 
-function exchangeCodeForToken(authCode) {
-    const tokenEndpoint = "https://authenticationgr.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/token";
+async function exchangeCodeForToken(authCode) {
+    const tokenEndpoint = "https://authenticationgr.b2clogin.com/authenticationGR.onmicrosoft.com/B2C_1_LogIn-SignUp_GR/oauth2/v2.0/token";
 
-    const body = new URLSearchParams({
+    const params = new URLSearchParams({
         grant_type: "authorization_code",
         client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
+        code: authCode,
         redirect_uri: "https://gentle-coast-03f74f10f.5.azurestaticapps.net/lobby.html",
-        code: authCode,  // Usamos el authCode directamente
-    }).toString();
+        code_verifier: "your-code-verifier", // Este debe coincidir con el generado
+    });
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", tokenEndpoint, true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    const response = await fetch(tokenEndpoint, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: params.toString(),
+    });
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {  // 4 significa que la solicitud se completó
-            if (xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
-                const accessToken = response.access_token;
+    if (!response.ok) {
+        console.error("Error exchanging code for token:", response.status, await response.text());
+        return null;
+    }
 
-                // Guarda el token en sessionStorage
-                sessionStorage.setItem("accessToken", accessToken);
-
-                // Llama a la API para crear el juego
-                createGameForPlayer(accessToken);
-            } else {
-                console.error("Error exchanging authorization code for token:", xhr.statusText);
-                alert("Failed to authenticate. Please try again.");
-            }
-        }
-    };
-
-    // Enviar la solicitud con el body que contiene los datos del formulario
-    xhr.send(body);
+    const data = await response.json();
+    console.log("Access Token:", data.access_token);
+    return data.access_token;
 }
+
 
 
 function createGameForPlayer(playerName, accessToken) {
