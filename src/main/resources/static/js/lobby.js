@@ -349,11 +349,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     api.createGame(playerName)
             .then(code => {
-                console.log("code: ", code);
-
-                gameCode = code;
-
-                return api.addPlayer(code, playerName);
+                let gameCode = code;
+                console.log("code: ", gameCode);
+                return api.addPlayer(gameCode, playerName);
             })
             .then(() => {
                 sessionStorage.setItem('gameCode', gameCode);
