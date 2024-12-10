@@ -21,6 +21,9 @@ var lobby = (function(){
     }
     
     var setPlayerName = function(){
+        console.log("code: ", gameCode);
+        console.log("code saved: ", sessionStorage.getItem('gameCode'));
+        
         api.getPlayer(gameCode, playerName)
             .then(function(player) {
                 playerRole = player.playerRole;   
@@ -350,7 +353,6 @@ document.addEventListener('DOMContentLoaded', function () {
     api.createGame(playerName)
             .then(code => {
                 let gameCode = code;
-                console.log("code: ", gameCode);
                 sessionStorage.setItem('gameCode', gameCode);
                 return api.addPlayer(gameCode, playerName);
             })
