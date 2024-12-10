@@ -106,9 +106,12 @@ let home = (function(){
 
         api.getGameByCode(gameCode)
             .then(function(game) {
+                console.log(game);
                 api.addPlayer(gameCode, playerName);
             })
             .then((game) => {
+                console.log("gameeeeeeeeeee: ", game);
+
                 let state = game.gameState;
                 if (state == "STARTED"){
                     window.location.href = `game.html`;

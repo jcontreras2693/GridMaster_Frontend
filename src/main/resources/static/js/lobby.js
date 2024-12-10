@@ -343,6 +343,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("codigo de acceso: ", authCode);
     let playerName = sessionStorage.getItem('playerName');
     let role = sessionStorage.getItem('role');
+    console.log("rol del jugador: ", role);
 
     if (role != "PLAYER"){
         if (!authCode) {
