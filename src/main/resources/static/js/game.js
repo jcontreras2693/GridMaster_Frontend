@@ -31,11 +31,15 @@ let game = (function() {
 
     var setPlayerConfig = function() {
         return api.getPlayer(gameCode, playerName).then(function(player) {
+            console.log(player);
             const rgb = player.color; // [255, 0, 0]
             const hexColor = rgbToHex(rgb[0], rgb[1], rgb[2]);
             playerColor = hexColor;
-            playerRow = player.position[0];
-            playerColumn = player.position[1];
+            playerRow = player.currentPosition.x;
+            playerColumn = player.currentPosition.y;
+
+            console.log("playerRow: ", playerRow, ", playerColumn: ", playerColumn);
+
             playerRole = player.playerRole;
 
             api.getTime(gameCode).then(
