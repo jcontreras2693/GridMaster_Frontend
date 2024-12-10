@@ -340,14 +340,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    const playerName = sessionStorage.getItem('playerName');
-
-    if (!accessToken) {
-        alert("You are not authenticated. Redirecting to login...");
-        redirectToAuthentication();
-        return;
-    }
-
     exchangeCodeForToken(authCode);
 
     // Configuración predeterminada en los inputs
