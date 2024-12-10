@@ -20,7 +20,7 @@ let home = (function(){
             return;
         }
 
-        saveGameData(playerName, gameCode);
+        saveGameData(playerName);
 
         let gameCode;
     
