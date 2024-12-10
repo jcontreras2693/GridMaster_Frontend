@@ -350,9 +350,7 @@ document.addEventListener('DOMContentLoaded', function () {
             alert("No authorization code found. Redirecting to login...");
             redirectToAuthentication(playerName);
         }
-    }
-
-    api.createGame(playerName)
+        api.createGame(playerName)
             .then(code => {
                 let gameCode = code;
                 sessionStorage.setItem('gameCode', gameCode);
@@ -365,6 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error("Error al crear el juego o añadir el jugador:", error);
             });
+    }
 
     //exchangeCodeForToken(authCode);
 
