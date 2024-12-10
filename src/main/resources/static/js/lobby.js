@@ -363,18 +363,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function redirectToAuthentication() {
     const baseUrl = "https://authenticationGR.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/authorize";
-    const params = new URLSearchParams({
-        p: "B2C_1_LogIn-SignUp_GR",
-        client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
-        nonce: "defaultNonce",
-        redirect_uri: "https://gentle-coast-03f74f10f.5.azurestaticapps.net/lobby.html",
-        scope: "openid offline_access",
-        response_type: "token",
-        prompt: "login",
-    });
+        const params = new URLSearchParams({
+            p: "B2C_1_LogIn-SignUp_GR",
+            client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
+            nonce: "defaultNonce",
+            redirect_uri: "https://gentle-coast-03f74f10f.5.azurestaticapps.net/lobby.html",
+            scope: "openid",
+            response_type: "code",
+            prompt: "login",
+            code_challenge_method: "S256",
+            code_challenge: "HMxtVf4UJVl8TOewidP9OkjewYFULC8l2niNRpPRLp4"
+        });
 
-    const loginUrl = `${baseUrl}?${params.toString()}`;
-    window.location.href = loginUrl;
+        const loginUrl = `${baseUrl}?${params.toString()}`;
+        window.location.href = loginUrl;
 }
 
 function createGameForPlayer(playerName, accessToken) {
