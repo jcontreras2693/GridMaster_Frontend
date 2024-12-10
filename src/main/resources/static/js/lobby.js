@@ -329,76 +329,95 @@ var lobby = (function(){
 })();
 
 document.addEventListener('DOMContentLoaded', function () {
-    const params = new URLSearchParams(window.location.search);
-    const authCode = params.get("code");
 
-    console.log("token de acceso: ", authCode);
-
-    if (!authCode) {
-        alert("No authorization code found. Redirecting to login...");
-        redirectToAuthentication();
-        return;
-    }
-
-    exchangeCodeForToken(authCode);
-
-    // Configuración predeterminada en los inputs
     document.getElementById('columns').value = 100;
     document.getElementById('rows').value = 100;
     document.getElementById('minutes').value = 5;
     document.getElementById('seconds').value = 0;
     document.getElementById('maxPlayers').value = 4;
 
+    const params = new URLSearchParams(window.location.search);
+    const authCode = params.get("code");
+
+    console.log("codigo de acceso: ", authCode);
+
+    if (!authCode) {
+        alert("No authorization code found. Redirecting to login...");
+        let playerName = sessionStorage.getItem('playerName');
+        redirectToAuthentication(playerName);
+    }
+
+    api.createGame(playerName)
+            .then(code => {
+                gameCode = code;
+                return api.addPlayer(gameCode, playerName);
+            })
+            .then(() => {
+                sessionStorage.setItem('gameCode', gameCode);
+            })
+            .then(() => {
+                game.setPlayerConfig();
+            })
+            .then(() => {
+                game.loadBoard();
+            })
+            .catch(error => {
+                console.error("Error al crear el juego o añadir el jugador:", error);
+            });
+
+    //exchangeCodeForToken(authCode);
+
 });
 
-function redirectToAuthentication() {
+async function redirectToAuthentication(playerName) {
     
-    // Genera el `code_verifier` y `code_challenge`
+    const codeChallenge = await generateCodeVerifierAndChallenge();
+    
+    const baseUrl = "https://authenticationGR.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/authorize";
+    const params = new URLSearchParams({
+        p: "B2C_1_LogIn-SignUp_GR",
+        client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
+        nonce: "defaultNonce",
+        redirect_uri: "https://gentle-coast-03f74f10f.5.azurestaticapps.net/lobby.html",
+        scope: "openid",
+        response_type: "code",
+        prompt: "login",
+        code_challenge_method: "S256",
+        code_challenge: codeChallenge,
+        login_hint: playerName, // Aquí agregas el valor capturado
+    });
+
+    const loginUrl = `${baseUrl}?${params.toString()}`;
+    window.location.href = loginUrl;
+}
+
+var generateCodeVerifierAndChallenge = async function() {
+    const generateCodeVerifier = () => {
+        const array = new Uint8Array(32);
+        window.crypto.getRandomValues(array);
+        return btoa(String.fromCharCode(...array))
+            .replace(/=+$/, '') // Elimina '='
+            .replace(/\+/g, '-') // Sustituye '+' por '-'
+            .replace(/\//g, '_'); // Sustituye '/' por '_'
+    };
+
+    const generateCodeChallenge = async (codeVerifier) => {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(codeVerifier);
+        const digest = await crypto.subtle.digest("SHA-256", data);
+        return btoa(String.fromCharCode(...new Uint8Array(digest)))
+            .replace(/=+$/, '')
+            .replace(/\+/g, '-')
+            .replace(/\//g, '_');
+    };
+
     const codeVerifier = generateCodeVerifier();
-    generateCodeChallenge(codeVerifier).then(codeChallenge => {
-        // Guarda el `code_verifier` para usarlo más tarde en el intercambio
-        sessionStorage.setItem("codeVerifier", codeVerifier);
+    const codeChallenge = await generateCodeChallenge(codeVerifier);
 
-        const baseUrl = "https://authenticationgr.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/authorize";
-        const params = new URLSearchParams({
-            p: "B2C_1_LogIn-SignUp_GR",
-            client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
-            nonce: "defaultNonce",
-            redirect_uri: "https://gentle-coast-03f74f10f.5.azurestaticapps.net/lobby.html",
-            scope: "openid",
-            response_type: "code",
-            prompt: "login",
-            code_challenge_method: "S256",
-            code_challenge: codeChallenge, // Aquí usas el `code_challenge` generado
-            login_hint: playerName, // Aquí agregas el valor capturado
-        });
+    // Guarda el code_verifier para usarlo más adelante al intercambiar el código
+    sessionStorage.setItem("codeVerifier", codeVerifier);
 
-        const loginUrl = `${baseUrl}?${params.toString()}`;
-        window.location.href = loginUrl;
-    });
-}
-
-function generateCodeVerifier() {
-    const array = new Uint8Array(32);
-    window.crypto.getRandomValues(array);
-    return base64urlEncode(array);
-}
-
-function generateCodeChallenge(codeVerifier) {
-    return sha256(codeVerifier).then(hash => base64urlEncode(hash));
-}
-
-// Función para convertir un array de bytes en base64url (sin signos + y /)
-function base64urlEncode(array) {
-    const base64 = btoa(String.fromCharCode.apply(null, array));
-    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-
-// Función para hacer hash con SHA-256
-function sha256(buffer) {
-    return crypto.subtle.digest('SHA-256', buffer).then(hash => {
-        return new Uint8Array(hash);
-    });
+    return codeChallenge;
 }
 
 async function exchangeCodeForToken(authCode) {
