@@ -433,7 +433,7 @@ async function exchangeCodeForToken(authCode) {
     }
 
     const data = await response.json();
-    console.log("Access Token:", data.access_token);
+    console.log("Data responce", data);
 
     // Devuelve el token o guárdalo en el sessionStorage si lo necesitas
     sessionStorage.setItem("accessToken", data.access_token);
