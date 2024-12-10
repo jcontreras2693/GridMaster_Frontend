@@ -411,14 +411,12 @@ function sha256(buffer) {
 
 function exchangeCodeForToken(authCode) {
     const tokenEndpoint = "https://authenticationgr.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/token";
-    const codeVerifier = sessionStorage.getItem("codeVerifier");  // Recupera el `code_verifier` guardado
 
     const body = new URLSearchParams({
         grant_type: "authorization_code",
         client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
         redirect_uri: "https://gentle-coast-03f74f10f.5.azurestaticapps.net/lobby.html",
-        code: authCode,
-        code_verifier: codeVerifier, // Aquí usas el `code_verifier` recuperado
+        code: authCode,  // Usamos el authCode directamente
     }).toString();
 
     const xhr = new XMLHttpRequest();
@@ -446,6 +444,7 @@ function exchangeCodeForToken(authCode) {
     // Enviar la solicitud con el body que contiene los datos del formulario
     xhr.send(body);
 }
+
 
 function createGameForPlayer(playerName, accessToken) {
 
