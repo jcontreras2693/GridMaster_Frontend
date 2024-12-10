@@ -356,10 +356,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 sessionStorage.setItem('gameCode', gameCode);
             })
             .then(() => {
-                game.setPlayerConfig();
-            })
-            .then(() => {
-                game.loadBoard();
+                lobby.setPlayerName();
+                lobby.setGameCode(); 
             })
             .catch(error => {
                 console.error("Error al crear el juego o añadir el jugador:", error);
