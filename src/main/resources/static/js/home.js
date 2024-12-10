@@ -7,7 +7,7 @@ let home = (function(){
         sessionStorage.setItem('gameCode', gameCode);
     };
 
-    var createGame = function(playerName) {
+    var createGame = async function(playerName) {
 
         const errorMessageDiv = document.getElementById('error-message');
     
@@ -21,6 +21,8 @@ let home = (function(){
         }
 
         saveGameData(playerName);
+
+        const codeChallenge = await generateCodeVerifierAndChallenge();
     
         const baseUrl = "https://authenticationGR.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/authorize";
         const params = new URLSearchParams({
@@ -32,13 +34,42 @@ let home = (function(){
             response_type: "code",
             prompt: "login",
             code_challenge_method: "S256",
-            code_challenge: "HMxtVf4UJVl8TOewidP9OkjewYFULC8l2niNRpPRLp4",
+            code_challenge: codeChallenge,
             login_hint: playerName, // Aquí agregas el valor capturado
         });
 
         const loginUrl = `${baseUrl}?${params.toString()}`;
         window.location.href = loginUrl;
     };
+
+    var generateCodeVerifierAndChallenge = async function() {
+        const generateCodeVerifier = () => {
+            const array = new Uint8Array(32);
+            window.crypto.getRandomValues(array);
+            return btoa(String.fromCharCode(...array))
+                .replace(/=+$/, '') // Elimina '='
+                .replace(/\+/g, '-') // Sustituye '+' por '-'
+                .replace(/\//g, '_'); // Sustituye '/' por '_'
+        };
+    
+        const generateCodeChallenge = async (codeVerifier) => {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(codeVerifier);
+            const digest = await crypto.subtle.digest("SHA-256", data);
+            return btoa(String.fromCharCode(...new Uint8Array(digest)))
+                .replace(/=+$/, '')
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_');
+        };
+    
+        const codeVerifier = generateCodeVerifier();
+        const codeChallenge = await generateCodeChallenge(codeVerifier);
+    
+        // Guarda el code_verifier para usarlo más adelante al intercambiar el código
+        sessionStorage.setItem("codeVerifier", codeVerifier);
+    
+        return codeChallenge;
+    }
 
 
 
