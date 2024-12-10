@@ -342,10 +342,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log("codigo de acceso: ", authCode);
     let playerName = sessionStorage.getItem('playerName');
+    let role = sessionStorage.getItem('role');
 
-    if (!authCode) {
-        alert("No authorization code found. Redirecting to login...");
-        redirectToAuthentication(playerName);
+    if (role != "PLAYER"){
+        if (!authCode) {
+            alert("No authorization code found. Redirecting to login...");
+            redirectToAuthentication(playerName);
+        }
     }
 
     api.createGame(playerName)

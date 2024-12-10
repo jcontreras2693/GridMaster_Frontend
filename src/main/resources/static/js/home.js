@@ -104,12 +104,21 @@ let home = (function(){
             return;
         }
 
-        api.addPlayer(gameCode, playerName)
-            .then(() => {
-                saveGameData(playerName, gameCode);
+        api.getGameByCode(gameCode)
+            .then(function(game) {
+                api.addPlayer(gameCode, playerName);
+            })
+            .then((game) => {
+                let state = game.gameState;
+                if (state == "STARTED"){
+                    window.location.href = `game.html`;
+                } else{
+                    window.location.href = `lobby.html`;
+                }
             })
             .then(() => {
-                window.location.href = `lobby.html`;
+                saveGameData(playerName, gameCode);
+                sessionStorage.setItem('role', "PLAYER");
             })
             .catch(error => {
                 console.log("Error recibido:", error); // Imprime el error completo
