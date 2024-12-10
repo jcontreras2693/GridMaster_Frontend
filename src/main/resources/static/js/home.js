@@ -21,8 +21,6 @@ let home = (function(){
         }
 
         saveGameData(playerName);
-
-        let gameCode;
     
         const baseUrl = "https://authenticationGR.b2clogin.com/authenticationGR.onmicrosoft.com/oauth2/v2.0/authorize";
         const params = new URLSearchParams({
@@ -33,6 +31,8 @@ let home = (function(){
             scope: "openid",
             response_type: "code",
             prompt: "login",
+            code_challenge_method: "S256",
+            code_challenge: "HMxtVf4UJVl8TOewidP9OkjewYFULC8l2niNRpPRLp4",
             login_hint: playerName, // Aquí agregas el valor capturado
         });
 
