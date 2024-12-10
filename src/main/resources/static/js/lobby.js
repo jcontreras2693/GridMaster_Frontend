@@ -404,12 +404,19 @@ function sha256(buffer) {
 async function exchangeCodeForToken(authCode) {
     const tokenEndpoint = "https://authenticationgr.b2clogin.com/authenticationGR.onmicrosoft.com/B2C_1_LogIn-SignUp_GR/oauth2/v2.0/token";
 
+    // Recuperar el code_verifier del sessionStorage
+    const codeVerifier = sessionStorage.getItem("codeVerifier");
+    if (!codeVerifier) {
+        console.error("Code verifier not found. Authorization flow might not have been initiated correctly.");
+        return null;
+    }
+
     const params = new URLSearchParams({
         grant_type: "authorization_code",
         client_id: "03ace639-70be-422e-ae33-9c80e173acf4",
         code: authCode,
         redirect_uri: "https://gentle-coast-03f74f10f.5.azurestaticapps.net/lobby.html",
-        code_verifier: "your-code-verifier", // Este debe coincidir con el generado
+        code_verifier: codeVerifier, // Recuperado del sessionStorage
     });
 
     const response = await fetch(tokenEndpoint, {
@@ -427,8 +434,12 @@ async function exchangeCodeForToken(authCode) {
 
     const data = await response.json();
     console.log("Access Token:", data.access_token);
+
+    // Devuelve el token o guárdalo en el sessionStorage si lo necesitas
+    sessionStorage.setItem("accessToken", data.access_token);
     return data.access_token;
 }
+
 
 
 
