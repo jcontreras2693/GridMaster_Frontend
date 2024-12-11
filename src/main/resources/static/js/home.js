@@ -160,7 +160,11 @@ let home = (function(){
     return {
         createGame,
         joinGame,
-        joinButton
+        joinButton,
+        generateCodeVerifierAndChallenge,
+        saveGameData
     };
 
 })();
+
+module.exports = home;
