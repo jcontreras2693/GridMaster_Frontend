@@ -393,7 +393,7 @@ async function redirectToAuthentication(playerName) {
     window.location.href = loginUrl;
 }
 
-let generateCodeVerifierAndChallenge = async function() {
+var generateCodeVerifierAndChallenge = async function() {
     const generateCodeVerifier = () => {
         const array = new Uint8Array(32);
         window.crypto.getRandomValues(array);
