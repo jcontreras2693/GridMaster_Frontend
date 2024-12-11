@@ -7,6 +7,10 @@ var summary = (function(){
         gameCode = code;
     }
 
+    let getGameCode = function(){
+        return gameCode;
+    }
+
     let updateScoreBoard = function(gameCode) {
         api.getScore(gameCode).then(function(players) {
             const scoreTableBody = document.getElementById('scoreTableBody');
@@ -46,7 +50,8 @@ var summary = (function(){
         updateScoreBoard,
         updatePlayerSection,
         setGameCode,
-        returnHome
+        returnHome,
+        getGameCode
     };
 
 })();
@@ -71,3 +76,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 });
+
+module.exports = summary;
