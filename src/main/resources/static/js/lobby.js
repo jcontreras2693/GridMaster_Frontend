@@ -430,7 +430,7 @@ var generateCodeVerifierAndChallenge = async function() {
     const codeVerifier = generateCodeVerifier();
     const codeChallenge = await generateCodeChallenge(codeVerifier);
 
-    // Guarda el code_verifier para usarlo más adelante al intercambiar el código
+    // Guarda el code_verifier para usarlo más adelante al intercambiar el código.
     sessionStorage.setItem("codeVerifier", codeVerifier);
 
     return codeChallenge;
