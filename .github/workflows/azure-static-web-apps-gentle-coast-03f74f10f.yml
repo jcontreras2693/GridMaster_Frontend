@@ -25,6 +25,15 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        with:
+            entryPoint: "/opt/sonar-scanner/bin/sonar-scanner"
+            args: >
+              -Dsonar.projectKey=jcontreras2693_GridMaster_Frontend
+              -Dsonar.organization=jcontreras2693
+              -Dsonar.host.url=https://sonarcloud.io
+              -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
+              -Dsonar.exclusions=**/img/**,**/coverage/**,**/__test__/**
+              -X
 
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
