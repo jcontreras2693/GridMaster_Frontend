@@ -44,32 +44,44 @@ let home = (function(){
         const generateCodeVerifier = () => {
             const array = new Uint8Array(32);
             window.crypto.getRandomValues(array);
-            return btoa(String.fromCharCode(...array))
-                .replace(/=+$/, '') // Elimina '='
-                .replace(/\+/g, '-') // Sustituye '+' por '-'
-                .replace(/\//g, '_'); // Sustituye '/' por '_'
+            let base64String = btoa(String.fromCharCode(...array));
+
+            // Eliminar los signos '=' al final sin usar expresión regular
+            while (base64String.endsWith('=')) {
+                base64String = base64String.slice(0, -1);
+            }
+
+            // Sustituir los caracteres '+' por '-' y '/' por '_'
+            base64String = base64String.replace(/\+/g, '-').replace(/\//g, '_');
+
+            return base64String;
         };
-    
+
         const generateCodeChallenge = async (codeVerifier) => {
             const encoder = new TextEncoder();
             const data = encoder.encode(codeVerifier);
             const digest = await crypto.subtle.digest("SHA-256", data);
-            return btoa(String.fromCharCode(...new Uint8Array(digest)))
-                .replace(/=+$/, '')
-                .replace(/\+/g, '-')
-                .replace(/\//g, '_');
+            let base64String = btoa(String.fromCharCode(...new Uint8Array(digest)));
+
+            // Eliminar los signos '=' al final sin usar expresión regular
+            while (base64String.endsWith('=')) {
+                base64String = base64String.slice(0, -1);
+            }
+
+            // Sustituir los caracteres '+' por '-' y '/' por '_'
+            base64String = base64String.replace(/\+/g, '-').replace(/\//g, '_');
+
+            return base64String;
         };
-    
+
         const codeVerifier = generateCodeVerifier();
         const codeChallenge = await generateCodeChallenge(codeVerifier);
-    
+
         // Guarda el code_verifier para usarlo más adelante al intercambiar el código
         sessionStorage.setItem("codeVerifier", codeVerifier);
-    
+
         return codeChallenge;
-    }
-
-
+    };
 
     let joinButton = function(){
         const gameIdInput = document.getElementById('gameIdInput');
