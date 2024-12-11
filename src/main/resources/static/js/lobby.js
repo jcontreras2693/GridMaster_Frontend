@@ -356,7 +356,7 @@ var lobby = (function(){
 
     })();
 
-module.exports = lobby;
+//module.exports = lobby;
 
 document.addEventListener('DOMContentLoaded', function () {
 
