@@ -42,7 +42,7 @@ let home = (function(){
         window.location.href = loginUrl;
     };
 
-    var generateCodeVerifierAndChallenge = async function() {
+    let generateCodeVerifierAndChallenge = async function() {
         const generateCodeVerifier = () => {
             const array = new Uint8Array(32);
             window.crypto.getRandomValues(array);
