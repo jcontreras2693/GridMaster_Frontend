@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1733956316224" clover="3.2.0">
-  <project timestamp="1733956316224" name="All files">
+<coverage generated="1733957269699" clover="3.2.0">
+  <project timestamp="1733957269699" name="All files">
     <metrics statements="594" coveredstatements="182" conditionals="120" coveredconditionals="29" methods="127" coveredmethods="29" elements="841" coveredelements="240" complexity="0" loc="594" ncloc="594" packages="1" files="4" classes="4"/>
     <file name="game.js" path="C:\Users\Mauricio Monroy\GridMaster_Frontend\src\main\resources\static\js\game.js">
       <metrics statements="213" coveredstatements="57" conditionals="40" coveredconditionals="2" methods="49" coveredmethods="11"/>
