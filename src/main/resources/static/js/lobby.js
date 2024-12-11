@@ -337,23 +337,24 @@ var lobby = (function(){
         setMaxPlayer(maxP);
     });
 
-    return {
-        setGameCode,
-        setDimensions,
-        setTime,
-        setPlayerName,
-        startGame,
-        exitGame,
-        connectAndSubscribe,
-        saveGameData,
-        getDimensions,
-        setMaxPlayer,
-        getMaxPlayer,
-        getMinutes,
-        getSeconds
-    };
+        return {
+            setGameCode,
+            setDimensions,
+            setTime,
+            setPlayerName,
+            startGame,
+            exitGame,
+            connectAndSubscribe,
+            saveGameData,
+            getDimensions,
+            setMaxPlayer,
+            getMaxPlayer,
+            getMinutes,
+            getSeconds,
+            updateSettings
+        };
 
-})();
+    })();
 
 module.exports = lobby;
 

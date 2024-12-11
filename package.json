@@ -205,6 +205,7 @@
     "type-fest": "^0.21.3",
     "undici-types": "^6.20.0",
     "update-browserslist-db": "^1.1.1",
+    "util": "^0.12.5",
     "v8-to-istanbul": "^9.3.0",
     "walker": "^1.0.8",
     "which": "^2.0.2",

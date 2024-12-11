@@ -208,5 +208,41 @@ describe('Lobby module tests', () => {
             'Time must be between 1:00 and 5:59'
         );
     });
+
+    test('updateSettings actualiza los valores correctamente', () => {
+        // Crear los elementos de entrada en el DOM
+        document.body.innerHTML = `
+            <input type="number" id="rows" value="50" />
+            <input type="number" id="columns" value="70" />
+            <input type="number" id="minutes" value="5" />
+            <input type="number" id="seconds" value="0" />
+            <input type="number" id="maxPlayers" value="4" />
+        `;
+    
+        // Datos de configuración que serán pasados a updateSettings
+        const settings = {
+            dimension: { first: 50, second: 80 },
+            minutes: 10,
+            seconds: 30,
+            maxPlayers: 6
+        };
+    
+        // Llamar a la función updateSettings con los settings
+        lobby.updateSettings(settings);
+    
+        // Verificar que los valores de los elementos HTML han sido actualizados
+        const rowsElement = document.getElementById('rows');
+        const columnsElement = document.getElementById('columns');
+        const minutesElement = document.getElementById('minutes');
+        const secondsElement = document.getElementById('seconds');
+        const maxPlayersElement = document.getElementById('maxPlayers');
+    
+        // Verificar los valores actualizados
+        expect(rowsElement.value).toBe('50');
+        expect(columnsElement.value).toBe('80');
+        expect(minutesElement.value).toBe('10');
+        expect(secondsElement.value).toBe('30');
+        expect(maxPlayersElement.value).toBe('6');
+    });
     
 });
