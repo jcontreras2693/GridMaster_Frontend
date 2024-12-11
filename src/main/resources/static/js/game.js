@@ -1,26 +1,50 @@
-let game = (function() {
-    const board = document.getElementById('board');
+    let game = (function() {
+        const board = document.getElementById('board');
 
-    let rows = sessionStorage.getItem('rows');
-    let columns = sessionStorage.getItem('columns');
-    let playerName = sessionStorage.getItem('playerName');
-    let playerRow = -1;
-    let playerColumn = -1;
-    let playerColor = "#FFA500";
-    let playerRole = null;
+        let rows = sessionStorage.getItem('rows');
+        let columns = sessionStorage.getItem('columns');
+        let playerName = sessionStorage.getItem('playerName');
+        let playerRow = -1;
+        let playerColumn = -1;
+        let playerColor = "#FFA500";
+        let playerRole = null;
 
-    let gameCode = sessionStorage.getItem('gameCode');
-    const boardContainer = document.querySelector('.board-container');
-    let timeTimer = null;
-    let scoreTimer = null;
-    let gameTime = null;
-    //const stompConnection = 'http://localhost:8080';
-    const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
+        let gameCode = sessionStorage.getItem('gameCode');
+        const boardContainer = document.querySelector('.board-container');
+        let timeTimer = null;
+        let scoreTimer = null;
+        let gameTime = null;
+        //const stompConnection = 'http://localhost:8080';
+        const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
 
 
-    const grid = Array.from({ length: rows }, () => Array(columns).fill(null));
-    let stompClient = null;
-    let players = [];
+        let grid = Array.from({ length: rows }, () => Array(columns).fill(null));
+        let stompClient = null;
+        let players = [];
+
+    var getRows = function(){
+        return rows;
+    }
+
+    var getColumns = function(){
+        return columns;
+    }
+
+    function setPlayerRow(newRow) {
+        playerRow = newRow;
+    }
+
+    function setPlayerColumn(newColumn) {
+        playerColumn = newColumn;
+    }
+
+    function setPlayerColor(newColor) {
+        playerColor = newColor;
+    }
+
+    function setGrid(newGrid) {
+        grid = newGrid;
+    }
 
     const colorToImageMap = {
         "#FF0000": "/images/red.png",
@@ -346,10 +370,22 @@ let game = (function() {
     return {
         loadBoard,
         setPlayerConfig,
-        drawAllTraces
+        drawAllTraces,
+        getRows,
+        getColumns,
+        setSizeofBoard,
+        rgbToHex,
+        positionPlayer,
+        setPlayerRow,
+        setPlayerColumn,
+        setPlayerColor,
+        setGrid,
+        centerViewOnPlayer
     };
 
 })();
+
+module.exports = game;
 
 document.addEventListener('DOMContentLoaded', function() {
 

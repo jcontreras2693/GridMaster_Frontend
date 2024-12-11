@@ -20,6 +20,18 @@ var lobby = (function(){
         };
     }
 
+    var getMaxPlayer = function() {
+        return maxPlayer;
+    }
+
+    var getMinutes = function() {
+        return minutes;
+    }
+
+    var getSeconds = function() {
+        return seconds;
+    }
+
     var setGameCode = function(){
         const gameCodeHTML = document.getElementById('gameCodeDisplay');
         if (gameCodeHTML) {
@@ -333,7 +345,11 @@ var lobby = (function(){
         exitGame,
         connectAndSubscribe,
         saveGameData,
-        getDimensions
+        getDimensions,
+        setMaxPlayer,
+        getMaxPlayer,
+        getMinutes,
+        getSeconds
     };
 
 })();

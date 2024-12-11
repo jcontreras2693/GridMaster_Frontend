@@ -102,5 +102,111 @@ describe('Lobby module tests', () => {
         // Restaurar el comportamiento original de console.error
         console.error.mockRestore();
     });
+
+    test('setMaxPlayer establece el número máximo de jugadores correctamente si es válido', () => {
+        jest.spyOn(console, 'error').mockImplementation(() => {});
+    
+        // Mock de sendSettingsToTopic
+        lobby.sendSettingsToTopic = jest.fn();
+    
+        document.body.innerHTML = `<div id="error-message" style="display: none;"></div>`;
+        const errorMessageDiv = document.getElementById('error-message');
+    
+        // Llamar a la función con un valor válido
+        lobby.setMaxPlayer(5);
+    
+        // Verificar que maxPlayer se establece correctamente
+        expect(lobby.getMaxPlayer()).toBe(5); // Usa getMaxPlayer para obtener el valor actual
+    
+        // Verificar que no se muestra mensaje de error
+        expect(errorMessageDiv.style.display).toBe('none');
+        expect(errorMessageDiv.textContent).toBe('');
+    
+        console.error.mockRestore();
+    });
+    
+    
+    test('setMaxPlayer muestra un mensaje de error si el valor es inválido', () => {
+        // Mock del DOM
+        document.body.innerHTML = `
+            <div id="error-message" style="display: none;"></div>
+        `;
+        const errorMessageDiv = document.getElementById('error-message');
+    
+        // Llamar a la función con un valor inválido
+        lobby.setMaxPlayer(15);
+    
+        // Verificar que maxPlayer no se actualiza
+        expect(lobby.maxPlayer).not.toBe(15);
+    
+        // Verificar que se muestra el mensaje de error
+        expect(errorMessageDiv.style.display).toBe('block');
+        expect(errorMessageDiv.textContent).toBe(
+            'The maximum number of players must be between 2 and 10'
+        );
+    });
+    
+    test('setTime establece el tiempo correctamente si es válido', () => {
+        jest.spyOn(console, 'error').mockImplementation(() => {});
+    
+        // Mock de sendSettingsToTopic
+        lobby.sendSettingsToTopic = jest.fn();
+    
+        document.body.innerHTML = `<div id="error-message" style="display: none;"></div>`;
+        const errorMessageDiv = document.getElementById('error-message');
+    
+        // Llamar a la función con un valor válido
+        lobby.setTime(3, 30);
+    
+        // Verificar que minutes y seconds se establecen correctamente
+        expect(lobby.getMinutes()).toBe(3);
+        expect(lobby.getSeconds()).toBe(30);
+    
+        // Verificar que no se muestra mensaje de error
+        expect(errorMessageDiv.style.display).toBe('none');
+        expect(errorMessageDiv.textContent).toBe('');
+    
+        console.error.mockRestore();
+    });    
+    
+    test('setTime muestra un mensaje de error si el valor es inválido', () => {
+        // Mock del DOM
+        document.body.innerHTML = `
+            <div id="error-message" style="display: none;"></div>
+        `;
+        const errorMessageDiv = document.getElementById('error-message');
+    
+        // Llamar a la función con un valor inválido
+        lobby.setTime(6, 0);  // Los minutos están fuera del rango
+    
+        // Verificar que los valores de minutes y seconds no se actualizan
+        expect(lobby.getMinutes()).not.toBe(6);  // No debe ser 6
+        expect(lobby.getSeconds()).toBe(0);  // No debe ser 0
+    
+        // Verificar que se muestra el mensaje de error
+        expect(errorMessageDiv.style.display).toBe('block');
+        expect(errorMessageDiv.textContent).toBe(
+            'Time must be between 1:00 and 5:59'
+        );
+    });   
+    
+    test('setTime muestra un mensaje de error si el valor es inválido', () => {
+        // Mock del DOM
+        document.body.innerHTML = `
+            <div id="error-message" style="display: none;"></div>
+        `;
+        const errorMessageDiv = document.getElementById('error-message');
+    
+        // Llamar a la función con un valor inválido
+        lobby.setTime(4, 70);  // Los minutos están fuera del rango
+    
+        expect(lobby.getSeconds()).not.toBe(70);  // No debe ser 0
+    
+        // Verificar que se muestra el mensaje de error
+        expect(errorMessageDiv.style.display).toBe('block');
+        expect(errorMessageDiv.textContent).toBe(
+            'Time must be between 1:00 and 5:59'
+        );
+    });
     
 });
