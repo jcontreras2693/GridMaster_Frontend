@@ -168,4 +168,4 @@ let home = (function(){
 
 })();
 
-module.exports = home;
+//module.exports = home;
