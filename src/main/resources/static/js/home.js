@@ -1,6 +1,4 @@
 let home = (function(){
-    const gameIdInput = document.getElementById('gameIdInput');
-    const joinGameButton = document.getElementById('joinGameButton');
 
     const saveGameData = function(playerName, gameCode) {
         sessionStorage.setItem('playerName', playerName);
@@ -86,6 +84,9 @@ let home = (function(){
     };
 
     let joinButton = function(){
+        const gameIdInput = document.getElementById('gameIdInput');
+        const joinGameButton = document.getElementById('joinGameButton');
+
         gameIdInput.style.display = 'inline-block';
         joinGameButton.style.display = 'inline-block';
     }
@@ -160,7 +161,11 @@ let home = (function(){
     return {
         createGame,
         joinGame,
-        joinButton
+        joinButton,
+        generateCodeVerifierAndChallenge,
+        saveGameData
     };
 
 })();
+
+module.exports = home;

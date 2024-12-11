@@ -1,4 +1,3 @@
-
 var lobby = (function(){
     let playerName = sessionStorage.getItem('playerName');
     let playerRole = "";
@@ -12,6 +11,14 @@ var lobby = (function(){
     let stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
     //let stompConnection = "http://localhost:8080"
     let stompClient = null;
+
+
+    var getDimensions = function() {
+        return {
+            columns: columns,  // Acceder directamente a las variables internas
+            rows: rows
+        };
+    }
 
     var setGameCode = function(){
         const gameCodeHTML = document.getElementById('gameCodeDisplay');
@@ -324,10 +331,14 @@ var lobby = (function(){
         setPlayerName,
         startGame,
         exitGame,
-        connectAndSubscribe
+        connectAndSubscribe,
+        saveGameData,
+        getDimensions
     };
 
 })();
+
+module.exports = lobby;
 
 document.addEventListener('DOMContentLoaded', function () {
 
