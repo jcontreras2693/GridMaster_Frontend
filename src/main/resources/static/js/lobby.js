@@ -8,8 +8,8 @@ var lobby = (function(){
     let seconds = 0;
     let maxPlayer = 4;
     let validateInputs = true;
-    let stompConnection = "https://74.179.216.35"
-    //let stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
+    //let stompConnection = "https://74.179.216.35"
+    let stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net"
     //let stompConnection = "http://localhost:8080"
     let stompClient = null;
 
