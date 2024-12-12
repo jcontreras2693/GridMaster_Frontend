@@ -77,4 +77,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-module.exports = summary;
+//module.exports = summary;
