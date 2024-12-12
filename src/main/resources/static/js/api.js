@@ -1,6 +1,7 @@
 api=(function(){
 
-    let linkAzure = "https://74.179.216.35/"
+    let linkAzure = "http://gridmaster.duckdns.org/"
+    //let linkAzure = "https://74.179.216.35/"
     //let linkAzure = "http://4.156.250.133/"
     //let linkAzure = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
     //var linkAzure = "http://localhost:8080/"
