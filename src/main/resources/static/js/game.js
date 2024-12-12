@@ -16,7 +16,7 @@
         let gameTime = null;
         //const stompConnection = 'http://localhost:8080';
         //const stompConnection = "https://gridmasterbackend-cdezamajdeadcchu.eastus-01.azurewebsites.net/"
-        const stompConnection = "http://4.156.250.133/"
+        const stompConnection = "https://74.179.216.35"
 
 
         let grid = Array.from({ length: rows }, () => Array(columns).fill(null));
