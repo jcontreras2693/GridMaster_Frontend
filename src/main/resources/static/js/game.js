@@ -386,7 +386,7 @@
 
 })();
 
-module.exports = game;
+//module.exports = game;
 
 document.addEventListener('DOMContentLoaded', function() {
 
