@@ -137,6 +137,8 @@ var lobby = (function(){
         maxPlayer = maxP;
         validateInputs = true;
 
+        api.updateGame(gameCode, minutes, seconds, rows, columns, maxPlayer);
+        
         sendSettingsToTopic({ maxPlayers: maxPlayer });
     };
 
